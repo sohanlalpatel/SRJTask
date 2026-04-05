@@ -1,121 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0)
+// Pages
+//  import Services from "./pages/Services";
+// import Projects from "./pages/Projects";
+// import Contact from "./pages/Contact";
 
+// Components
+ import Home from "./components/pages/Home";
+import Navbar from "./components/pages/home/Navbar";
+import FloatingContact from "./components/pages/home/FloatingContact";
+import Services from "./components/pages/Service/ServicesPage";
+import AboutPage from "./components/pages/About/AboutUsPage";
+import Footer from "./components/pages/home/Footer";
+import AdminLogin from "./components/admin/adminlogin";
+import { Dashbaord } from "./components/admin/Dashboard";
+import Blogs from "./components/pages/Blogs/BlogPage";
+import BlogDetail from "./components/pages/Blogs/BlogDetail";
+import PricingPage from "./components/pages/Pricing/PricingPage";
+import PricingFullPage from "./components/pages/Pricing/PricingFullPage";
+import Industries from "./components/pages/Industries/Industries";
+import ContactUs from "./components/pages/Contact/Contactus";
+import ScrollToTop from "./components/pages/home/ScrollTotop";
+import PrivacyPolicy from "./components/pages/home/PrivacyPolicy";
+ // import CustomCursor from "./components/pages/CustomCursor";
+// import Footer from "./components/Footer";
+ 
+const App = () => {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Router>
+      {/* Global Navbar */}
+      <ScrollToTop />
+      <FloatingContact />
+      {/* <CustomCursor /> */}
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/blogs/:slug" element={<BlogDetail />} />
 
-      <div className="ticks"></div>
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/industries" element={<Industries />} />
+        <Route path="/pricing" element={<PricingFullPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/srj/admin/login" element={<AdminLogin />} />
+        <Route path="/srj/panel/dashboard" element={<Dashbaord />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        {/* <Route path="/services" element={<Services />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/contact" element={<Contact />} /> */}
+      </Routes>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
-}
+      {/* Global Footer */}
+    </Router>
+  );
+};
 
-export default App
+export default App;
