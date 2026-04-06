@@ -12,7 +12,7 @@ const planRoutes = require("./routers/planRoutes");
 const addonRoutes = require("./routers/addonRoutes");
 const contactRoutes = require("./routers/contactRouter");
 const chatRoutes = require("./routers/chatroutes");
-
+const industryRoutes = require("./routers/industryRoutes");
 
 dotenv.config();
 
@@ -36,7 +36,7 @@ app.use("/api/plans", planRoutes);
 app.use("/api/addons", addonRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/chat", chatRoutes);
-
+app.use("/api/industries", industryRoutes);
 
 
 

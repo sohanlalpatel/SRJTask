@@ -172,23 +172,7 @@ const legalLinks = [
         </div>
       </div>
 
-      {/* 🚀 FLOATING BUTTONS (RIGHT SIDE) */}
-      <div className="fixed right-6 bottom-24 flex flex-col gap-4 z-50">
-        {/* 💼 Portfolio */}
-        <button className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center shadow-lg hover:scale-110 transition">
-          <Briefcase size={18} color="#fff" />
-        </button>
-
-        {/* 🟢 WhatsApp */}
-        <button className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center shadow-lg hover:scale-110 transition">
-          <FaWhatsapp size={20} color="#fff" />
-        </button>
-
-        {/* 💬 Chat */}
-        <button className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center shadow-lg hover:scale-110 transition">
-          <MessageCircle size={20} color="#fff" />
-        </button>
-      </div>
+     
     </footer>
   );
 }

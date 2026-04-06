@@ -14,7 +14,7 @@ export default function Services() {
   const [active, setActive] = useState(null);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-const navigate = useNavigate();
+  const navigate = useNavigate();
   // ✅ Fetch
   useEffect(() => {
     axios.get(`${API}/getAllServices`).then((res) => {
@@ -34,15 +34,15 @@ const navigate = useNavigate();
   );
 
   // Categories (auto)
-  const categories = [
-    "All",
-    ...new Set(services.map((s) => s.category || "General")),
-  ];
+ const categories = [
+   "All",
+   ...new Set(services.map((s) => s.category?.name || "General")),
+ ];
 
   const finalData =
     category === "All"
       ? filtered
-      : filtered.filter((s) => s.category === category);
+      : filtered.filter((s) => s.category?.name === category);
 
   return (
     <>
@@ -51,17 +51,17 @@ const navigate = useNavigate();
       <section className="min-h-screen bg-[#081638] text-white px-4 py-20">
         <div className="max-w-7xl mx-auto">
           {/* HERO HEADER */}
-          <div className="relative text-center mb-14 pt-8 md:pt-18  animate-fadeIn">
+          <div className="relative text-center mb-14 pt-8 md:pt-18  ">
             {/* Background Glow */}
             <div className="absolute inset-0 flex justify-center">
               <div className="w-[400px] h-[200px] bg-[#2563EB]/20 blur-3xl rounded-full"></div>
             </div>
 
-            <h1 className="relative text-4xl md:text-6xl font-bold bg-gradient-to-r from-[#38BDF8] via-white to-[#7C3AED] bg-clip-text text-transparent">
+            <h1 className="relative text-4xl md:text-6xl font-bold bg-gradient-to-r from-[#38BDF8] via-white to-[#7C3AED] bg-clip-text text-transparent   animate-fadeIn">
               Explore Our Services
             </h1>
 
-            <p className="relative text-gray-400 mt-4 max-w-xl mx-auto text-lg">
+            <p className="relative text-gray-400 mt-4 max-w-xl mx-auto text-lg animate-fadeIn">
               Powerful digital solutions designed to scale your business with
               cutting-edge technology
             </p>
@@ -241,7 +241,7 @@ const navigate = useNavigate();
 
                   {/* CATEGORY BADGE */}
                   <span className="absolute top-3 left-3 bg-[#38BDF8]/20 text-[#38BDF8] px-3 py-1 text-xs rounded-full">
-                    {active.category}
+                    {active.category?.name}{" "}
                   </span>
                 </div>
 

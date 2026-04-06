@@ -11,6 +11,7 @@ export default function ServiceManager() {
    shortDescription: "",
    description: "",
    features: "",
+   category: "",
    price: "",
    icon: "",
    order: "",
@@ -21,16 +22,45 @@ export default function ServiceManager() {
   const [isOpen, setIsOpen] = useState(false);
   const [editId, setEditId] = useState(null);
 const [selected, setSelected] = useState(null);
-
+const [categories, setCategories] = useState([]);
   // ================= FETCH =================
-  const fetchServices = async () => {
-    const res = await axios.get(`${API}/getAllServices`);
-    setServices(res.data.data);
-  };
+ const fetchServices = async () => {
+   try {
+     const res = await axios.get(`${API}/getAllServices`);
+     setServices(res.data.data || []);
+   } catch (error) {
+     console.error("Error fetching services:", error);
+   }
+ };
 
-  useEffect(() => {
-    fetchServices();
-  }, []);
+ const fetchCategories = async () => {
+   try {
+     const res = await axios.get(
+       "http://localhost:5000/api/categories/getCategories",
+     );
+     setCategories(res.data.data || []);
+   } catch (error) {
+     console.error("Error fetching categories:", error);
+   }
+ };
+
+ useEffect(() => {
+   fetchServices();
+   fetchCategories();
+ }, []);
+
+
+
+const groupedServices = services.reduce((acc, service) => {
+  const categoryName = service.category?.name || "Other";
+
+  if (!acc[categoryName]) {
+    acc[categoryName] = [];
+  }
+
+  acc[categoryName].push(service);
+  return acc;
+}, {});
 
   // ================= HANDLE CHANGE =================
   const handleChange = (e) => {
@@ -47,7 +77,7 @@ const handleSubmit = async () => {
   const formData = new FormData();
 
   formData.append("name", form.name);
-  formData.append("slug", form.slug);
+   formData.append("category", form.category);
   formData.append("shortDescription", form.shortDescription);
   formData.append("description", form.description);
   formData.append("features", form.features);
@@ -57,7 +87,7 @@ const handleSubmit = async () => {
   formData.append("isActive", form.isActive);
 
   if (form.serviceImage) {
-    formData.append("image", form.serviceImage);
+    formData.append("serviceImage", form.serviceImage);
   }
 
   if (editId) {
@@ -76,6 +106,7 @@ const handleSubmit = async () => {
      slug: "",
      shortDescription: "",
      description: "",
+     category: "",
      features: "",
      price: "",
      icon: "",
@@ -90,10 +121,18 @@ const handleSubmit = async () => {
   // ================= EDIT =================
 const handleEdit = (service) => {
   setForm({
-    ...service,
-    features: service.features?.join(", "),
+    name: service.name || "",
+    shortDescription: service.shortDescription || "",
+    description: service.description || "",
+    features: service.features?.join(", ") || "",
+    price: service.price || "",
+    icon: service.icon || "",
     order: service.order || "",
+    category: service.category?._id || "",
+    isActive: service.isActive,
+    serviceImage: null,
   });
+
   setEditId(service._id);
   setIsOpen(true);
 };
@@ -184,70 +223,66 @@ const handleEdit = (service) => {
           </tbody>
         </table>
       </div> */}
+      <div className=" ">
+        {Object.entries(groupedServices).map(([categoryName, services]) => (
+          <div key={categoryName} className="mb-10 w-full">
+            {/* CATEGORY TITLE */}
+            <h2 className="text-2xl font-bold text-[#38BDF8] mb-4">
+              {categoryName}
+            </h2>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => (
-          <div
-            key={s._id}
-            className="bg-[#020617] rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group border border-gray-100"
-          >
-            {/* Image */}
-            <div className="relative">
-              <img
-                src={s.image}
-                alt={s.name}
-                className="w-full h-44 object-cover group-hover:scale-105 transition"
-              />
-              <div className="mb-3 text-white">
-                {Icons[s.icon] &&
-                  React.createElement(Icons[s.icon], { size: 30 })}
-              </div>
-
-              {/* Status Badge */}
-              {/* <span
-                className={`absolute top-3 left-3 px-3 py-1 text-xs rounded-full ${
-                  s.isActive
-                    ? "bg-green-100 text-green-600"
-                    : "bg-red-100 text-red-500"
-                }`}
-              >
-                {s.isActive ? "Active" : "Inactive"}
-              </span> */}
-            </div>
-
-            {/* Content */}
-            <div className="p-5">
-              <h3 className="text-lg font-semibold text-white">{s.name}</h3>
-
-              <p className="text-gray-500 text-sm mt-2 line-clamp-2">
-                {s.shortDescription}
-              </p>
-
-              {/* Buttons */}
-              <div className="flex justify-between mt-4">
-                <button
-                  onClick={() => setSelected(s)}
-                  className="bg-[#2563EB] text-white px-3 py-1 rounded hover:bg-[#7C3AED]"
+            {/* SERVICES GRID */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {services.map((s) => (
+                <div
+                  key={s._id}
+                  className="bg-[#020617] rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden"
                 >
-                  View
-                </button>
+                  {/* IMAGE */}
+                  <img
+                    src={s.image}
+                    alt={s.name}
+                    className="w-full h-44 object-cover"
+                  />
 
-                <div className="space-x-2">
-                  <button
-                    onClick={() => handleEdit(s)}
-                    className="text-[#2563EB] font-medium"
-                  >
-                    Edit
-                  </button>
+                  {/* CONTENT */}
+                  <div className="p-5">
+                    <h3 className="text-lg font-semibold text-white">
+                      {s.name}
+                    </h3>
 
-                  <button
-                    onClick={() => handleDelete(s._id)}
-                    className="text-red-500 font-medium"
-                  >
-                    Delete
-                  </button>
+                    <p className="text-gray-400 text-sm mt-2">
+                      {s.shortDescription}
+                    </p>
+
+                    {/* ✅ BUTTONS INSIDE CARD */}
+                    <div className="flex justify-between mt-4">
+                      <button
+                        onClick={() => setSelected(s)}
+                        className="bg-[#2563EB] text-white px-3 py-1 rounded hover:bg-[#7C3AED]"
+                      >
+                        View
+                      </button>
+
+                      <div className="space-x-2">
+                        <button
+                          onClick={() => handleEdit(s)}
+                          className="text-[#2563EB] font-medium"
+                        >
+                          Edit
+                        </button>
+
+                        <button
+                          onClick={() => handleDelete(s._id)}
+                          className="text-red-500 font-medium"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         ))}
@@ -269,6 +304,21 @@ const handleEdit = (service) => {
                 onChange={handleChange}
                 className="w-full border p-2 rounded"
               />
+
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="w-full border p-2 rounded"
+              >
+                <option value="">Select Category</option>
+
+                {categories.map((cat) => (
+                  <option key={cat._id} value={cat._id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
 
               <input
                 name="shortDescription"

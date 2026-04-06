@@ -3,9 +3,9 @@ const transporter = require("../config/email");
  
 const createContact = async (req, res) => {
     try {
-        const { name, email, phone, message } = req.body;
+        const { name, email, phone, service, message } = req.body;
 
-        if (!name || !email || !phone || !message) {
+        if (!name || !email || !phone ||!service || !message) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required",
@@ -13,7 +13,7 @@ const createContact = async (req, res) => {
         }
 
         // ✅ Save to DB
-        const newContact = new Contact({ name, email, phone, message });
+        const newContact = new Contact({ name, email, service, phone, message });
         await newContact.save();
 
         // ✅ Email to ADMIN
@@ -57,6 +57,11 @@ const createContact = async (req, res) => {
           <td style="padding:10px; font-weight:bold; color:#374151;">Phone:</td>
           <td style="padding:10px;">${phone}</td>
         </tr>
+
+<tr>
+  <td style="padding:10px; font-weight:bold; color:#374151;">Service:</td>
+  <td style="padding:10px;">${service}</td>
+</tr>
 
         <tr style="background:#f9fafb;">
           <td style="padding:10px; font-weight:bold; color:#374151;">Message:</td>
@@ -102,6 +107,7 @@ const createContact = async (req, res) => {
     <p style="color:#374151;">
       We have received your message. Our team will contact you shortly.
     </p>
+<p><b>Selected Service:</b> ${service}</p>
 
     <div style="margin:20px 0; padding:15px; background:#f9fafb; border-radius:8px;">
       <p style="margin:0;"><b>Your Message:</b></p>

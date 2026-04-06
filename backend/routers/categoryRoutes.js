@@ -15,6 +15,7 @@ router.post("/createCategory", createCategory);
 // READ ALL
 router.get("/getCategories", getCategories);
 
+ 
 // READ ONE
 router.get("/getCategory/:id", getCategory);
 

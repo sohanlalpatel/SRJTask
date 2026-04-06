@@ -1,23 +1,33 @@
 const PricingPlan = require("../models/PricingPlan");
-
-// 🔧 Helper function (IMPORTANT)
+const Service = require("../models/services"); // ✅ FIXED
+const mongoose = require("mongoose");
+// 🔧 Helper
 const formatArrayField = (field) => {
     if (!field) return [];
     if (Array.isArray(field)) return field;
-    return field.split(",").map((item) => item.trim());
+
+    if (typeof field === "string") {
+        return field.split(",").map((item) => item.trim());
+    }
+
+    return [];
 };
 
 // ================= CREATE =================
 exports.createPlan = async (req, res) => {
     try {
-        let {
-            basePrice,
-            features,
-            technologies,
-            isPopular,
-        } = req.body;
+        let { basePrice, features, technologies, isPopular, service } = req.body;
 
-        // ✅ Price clean
+        // ✅ VALIDATION (VERY IMPORTANT)
+        if (!service) {
+            return res.status(400).json({ error: "Service is required" });
+        }
+
+        if (!mongoose.Types.ObjectId.isValid(service)) {
+            return res.status(400).json({ error: "Invalid Service ID" });
+        }
+
+        // ✅ PRICE FIX
         if (basePrice) {
             basePrice = basePrice.toString().replace(/,/g, "");
         }
@@ -25,30 +35,31 @@ exports.createPlan = async (req, res) => {
         const plan = await PricingPlan.create({
             ...req.body,
 
-            basePrice: Number(basePrice) || 0,
+            service: new mongoose.Types.ObjectId(service), // 🔥 FORCE FIX
 
-            // ✅ Arrays
+            basePrice: Number(basePrice) || 0,
             features: formatArrayField(features),
             technologies: formatArrayField(technologies),
-
-            // ✅ Boolean fix
             isPopular: isPopular === "true" || isPopular === true,
         });
 
-        res.json(plan);
+        res.json({ success: true, data: plan });
     } catch (err) {
+        console.log("CREATE PLAN ERROR:", err); // 🔥 DEBUG
         res.status(500).json({ error: err.message });
     }
 };
-
 // ================= READ ALL =================
 exports.getPlans = async (req, res) => {
     try {
-        const plans = await PricingPlan.find()
-            .populate("category")
-            .sort({ order: -1 });
+        const plans = await PricingPlan.find({ isActive: true })
+            .populate({
+                path: "service",
+                populate: { path: "category" },
+            })
+            .sort({ order: 1 });
 
-        res.json(plans);
+        res.json({ success: true, data: plans });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -57,11 +68,43 @@ exports.getPlans = async (req, res) => {
 // ================= READ BY CATEGORY =================
 exports.getPlansByCategory = async (req, res) => {
     try {
-        const plans = await PricingPlan.find({
+        const services = await Service.find({
             category: req.params.categoryId,
-        }).sort({ order: 1 });
+            isActive: true,
+        });
 
-        res.json(plans);
+        const serviceIds = services.map((s) => s._id);
+
+        const plans = await PricingPlan.find({
+            service: { $in: serviceIds },
+            isActive: true,
+        })
+            .populate({
+                path: "service",
+                populate: { path: "category" },
+            })
+            .sort({ order: 1 });
+
+        res.json({ success: true, data: plans });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// ================= READ BY SERVICE ================= 🔥
+exports.getPlansByService = async (req, res) => {
+    try {
+        const plans = await PricingPlan.find({
+            service: req.params.serviceId,
+            isActive: true,
+        })
+            .populate({
+                path: "service",
+                populate: { path: "category" },
+            })
+            .sort({ order: 1 });
+
+        res.json({ success: true, data: plans });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -70,8 +113,12 @@ exports.getPlansByCategory = async (req, res) => {
 // ================= READ ONE =================
 exports.getPlan = async (req, res) => {
     try {
-        const plan = await PricingPlan.findById(req.params.id);
-        res.json(plan);
+        const plan = await PricingPlan.findById(req.params.id).populate({
+            path: "service",
+            populate: { path: "category" },
+        });
+
+        res.json({ success: true, data: plan });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -80,20 +127,13 @@ exports.getPlan = async (req, res) => {
 // ================= UPDATE =================
 exports.updatePlan = async (req, res) => {
     try {
-        let {
-            basePrice,
-            features,
-            technologies,
-            isPopular,
-        } = req.body;
+        let { basePrice, features, technologies, isPopular } = req.body;
 
-        // ✅ Price clean
         if (basePrice) {
             basePrice = basePrice.toString().replace(/,/g, "");
             req.body.basePrice = Number(basePrice);
         }
 
-        // ✅ Arrays
         if (features) {
             req.body.features = formatArrayField(features);
         }
@@ -102,7 +142,6 @@ exports.updatePlan = async (req, res) => {
             req.body.technologies = formatArrayField(technologies);
         }
 
-        // ✅ Boolean fix
         if (isPopular !== undefined) {
             req.body.isPopular = isPopular === "true" || isPopular === true;
         }
@@ -110,10 +149,10 @@ exports.updatePlan = async (req, res) => {
         const plan = await PricingPlan.findByIdAndUpdate(
             req.params.id,
             req.body,
-            { new: true } // ✅ correct option
-        );
+            { new: true }
+        ).populate("service"); // ✅ nice to have
 
-        res.json(plan);
+        res.json({ success: true, data: plan });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -123,7 +162,7 @@ exports.updatePlan = async (req, res) => {
 exports.deletePlan = async (req, res) => {
     try {
         await PricingPlan.findByIdAndDelete(req.params.id);
-        res.json({ message: "Plan deleted" });
+        res.json({ success: true, message: "Plan deleted" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

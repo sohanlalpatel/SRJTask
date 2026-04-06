@@ -1,4 +1,5 @@
 const PricingCategory = require("../models/PricingCategory");
+const Service = require("../models/services");
 const slugify = require("slugify");
 
 // CREATE
@@ -15,10 +16,31 @@ exports.createCategory = async (req, res) => {
     }
 };
 
-// READ ALL
+
+
+
+// GET ALL WITH SERVICE COUNT 🔥
 exports.getCategories = async (req, res) => {
-    const data = await PricingCategory.find().sort();
-    res.json(data);
+    try {
+        const categories = await PricingCategory.find({ isActive: true })
+            .sort({ createdAt:1 });
+        const data = await Promise.all(
+            categories.map(async (cat) => {
+                const serviceCount = await Service.countDocuments({
+                    category: cat._id,
+                });
+
+                return {
+                    ...cat.toObject(),
+                    serviceCount,
+                };
+            })
+        );
+
+        res.json({ success: true, data });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 // READ ONE
@@ -46,3 +68,4 @@ exports.deleteCategory = async (req, res) => {
     await PricingCategory.findByIdAndDelete(req.params.id);
     res.json({ message: "Deleted successfully" });
 };
+

@@ -91,7 +91,7 @@ export default function Blogs() {
             }}
           />
 
-          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 py-20 text-center">
+          <div className="relative max-w-6xl mx-auto px-4 pt-34 sm:px-6 py-20 text-center">
             <span
               className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"
               style={{

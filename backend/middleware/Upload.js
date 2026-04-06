@@ -19,8 +19,8 @@ const uploadConfig = {
         folder: "blogs",
         allowed: /\.(jpg|jpeg|png|webp|avif)$/i,
     },
-    bannerImage: {
-        folder: "banners",
+    industryImage: {
+        folder: "industries",
         allowed: /\.(jpg|jpeg|png|webp|avif)$/i,
     },
     resume: {

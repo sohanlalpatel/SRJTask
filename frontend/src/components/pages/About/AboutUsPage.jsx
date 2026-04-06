@@ -10,6 +10,7 @@ import {
 import Footer from "../home/Footer";
 import Navbar from "../home/Navbar";
 import Stats from "../home/Stats";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function About() {
   const stats = [
@@ -18,7 +19,7 @@ export default function About() {
     { number: "15+", label: "Years Experience" },
     { number: "98%", label: "Client Satisfaction" },
   ];
-
+const navigate = useNavigate();
 const team = [
   {
     name: "Arjun Malhotra",
@@ -90,9 +91,9 @@ const team = [
   return (
     <>
       <Navbar />
-      <div className="bg-[#0B1220] text-white">
+      <div className="bg-[#0B1220] text-white ">
         {/* ================= HERO ================= */}
-        <section className="relative min-h-[90vh] flex items-center bg-[#0B1220] overflow-hidden">
+        <section className="relative min-h-[90vh] pt-10 md:pt-20  flex items-center bg-[#0B1220] overflow-hidden">
           {/* 🔥 Background glow */}
           <div className="absolute top-0 left-0 w-96 h-96 bg-[#6366F1]/20 blur-3xl rounded-full"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#0EA5E9]/20 blur-3xl rounded-full"></div>
@@ -114,7 +115,10 @@ const team = [
 
               {/* Buttons */}
               <div className="flex gap-4">
-                <button className="bg-gradient-to-r from-[#2563EB] to-[#38BDF8] px-6 py-3 rounded-lg">
+                <button
+                  onClick={() => navigate("/pricing")}
+                  className="bg-gradient-to-r from-[#2563EB] to-[#38BDF8] px-6 py-3 rounded-lg"
+                >
                   Get Started
                 </button>
 
@@ -281,7 +285,10 @@ const team = [
                 solutions that drive real business growth and long-term success.
               </p>
 
-              <button className="bg-gradient-to-r from-[#2563EB] to-[#38BDF8] px-6 py-3 rounded-lg">
+              <button
+                onClick={() => navigate("/pricing")}
+                className="bg-gradient-to-r from-[#2563EB] to-[#38BDF8] px-6 py-3 rounded-lg"
+              >
                 Get Started
               </button>
             </div>
@@ -390,12 +397,15 @@ const team = [
         {/* ================= TESTIMONIAL ================= */}
 
         {/* ================= CTA ================= */}
-        <section className="py-20 text-center bg-gradient-to-r from-[#2563EB] to-[#38BDF8]">
+        <section className="py-20 text-center bg-gradient-to-r from-[#081b44] to-[#0b3c51]">
           <h2 className="text-4xl font-bold mb-4">
-            Let’s Build Something Great 🚀
+            Let’s Build Something Great
           </h2>
 
-          <button className="bg-white text-black px-6 py-3 rounded-lg flex items-center gap-2 mx-auto">
+          <button
+            onClick={() => navigate("/services")}
+            className="bg-white text-black px-6 py-3 rounded-lg flex items-center gap-2 mx-auto"
+          >
             Start Now <ArrowUpRight size={16} />
           </button>
         </section>

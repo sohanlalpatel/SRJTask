@@ -208,10 +208,10 @@ const [showAll, setShowAll] = useState(false);
   return (
     <>
       <Navbar />
-      <div className="bg-[#0B1220] text-white min-h-screen px-6 py-16">
+      <div className="bg-[#0B1220] text-white min-h-screen pt-46 px-6 py-26 ">
         {/* ================= HEADER ================= */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 animateanimate-fadeIn">
             Our Industrial Services
           </h1>
           <p className="text-gray-400">

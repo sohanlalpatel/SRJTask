@@ -4,14 +4,14 @@ import axios from "axios";
 const CAT_API = "http://localhost:5000/api/categories";
 const PLAN_API = "http://localhost:5000/api/plans";
 const ADDON_API = "http://localhost:5000/api/addons";
-
+const SERVICE_API = "http://localhost:5000/api/services";
 export default function PricingManager() {
   const [categories, setCategories] = useState([]);
   const [plans, setPlans] = useState([]);
   const [addons, setAddons] = useState([]);
-
+  const [services, setServices] = useState([]);
   const [activeTab, setActiveTab] = useState("category");
-
+  const [selectedService, setSelectedService] = useState("");
   const [form, setForm] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -21,10 +21,12 @@ export default function PricingManager() {
     const cat = await axios.get(`${CAT_API}/getCategories`);
     const plan = await axios.get(`${PLAN_API}/getPlans`);
     const add = await axios.get(`${ADDON_API}/getAddOns`);
+    const serv = await axios.get(`${SERVICE_API}/getAllServices`);
 
-    setCategories(cat.data);
-    setPlans(plan.data);
-    setAddons(add.data);
+    setCategories(cat.data.data || []);
+    setPlans(plan.data.data || []);
+    setAddons(add.data || []);
+    setServices(serv.data.data || []);
   };
 
   useEffect(() => {
@@ -39,17 +41,30 @@ export default function PricingManager() {
 
   // ================= SUBMIT =================
   const handleSubmit = async () => {
+    if (activeTab === "plan") {
+      if (!form.name || form.basePrice === "" || !form.service) {
+        alert("Plan name, price and service required");
+        return;
+      }
+    }
+
     try {
       if (activeTab === "category") {
         editId
           ? await axios.put(`${CAT_API}/updateCategory/${editId}`, form)
           : await axios.post(`${CAT_API}/createCategory`, form);
       }
-
       if (activeTab === "plan") {
+        const cleanForm = {
+          ...form,
+          basePrice: Number(form.basePrice || 0),
+          features: form.features || "",
+          technologies: form.technologies || "",
+        };
+        console.log("FORM DATA:", form);
         editId
-          ? await axios.put(`${PLAN_API}/updatePlan/${editId}`, form)
-          : await axios.post(`${PLAN_API}/createPlan`, form);
+          ? await axios.put(`${PLAN_API}/updatePlan/${editId}`, cleanForm)
+          : await axios.post(`${PLAN_API}/createPlan`, cleanForm);
       }
 
       if (activeTab === "addon") {
@@ -63,7 +78,8 @@ export default function PricingManager() {
       setForm({});
       setEditId(null);
     } catch (err) {
-      alert(err.message);
+      console.log("FULL ERROR:", err.response?.data);
+      alert(err.response?.data?.error || "Server Error");
     }
   };
 
@@ -89,32 +105,55 @@ export default function PricingManager() {
       ...item,
       features: item.features?.join(", "),
       technologies: item.technologies?.join(", "),
-      category: item.category?._id || item.category,
+      service: item.service?._id || item.service,
     });
 
     setEditId(item._id);
     setIsOpen(true);
   };
 
-  const inputStyle ="w-full p-2 bg-[#0F172A] text-white border border-[#1e293b] rounded";
+  const inputStyle =
+    "w-full p-2 bg-[#0F172A] text-white border border-[#1e293b] rounded";
 
+  const filteredPlans = selectedService
+    ? plans.filter((p) => p.service?._id === selectedService)
+    : plans;
   // ================= UI =================
   return (
     <div className="p-6 bg-[#0F172A] min-h-screen text-white">
       {/* HEADER */}
-      <div className="flex justify-between mb-6">
+      <div className="flex justify-between mb-6 items-center">
         <h2 className="text-2xl font-bold text-[#38BDF8]">Pricing Manager</h2>
 
-        <button
-          onClick={() => {
-            setIsOpen(true);
-            setForm({});
-            setEditId(null);
-          }}
-          className="bg-[#2563EB] px-4 py-2 rounded hover:bg-[#7C3AED]"
-        >
-          + Add
-        </button>
+        <div className="flex gap-3">
+          {/* 🔥 SERVICE FILTER DROPDOWN */}
+          {activeTab === "plan" && (
+            <select
+              value={selectedService}
+              onChange={(e) => setSelectedService(e.target.value)}
+              className="p-2 bg-[#0F172A] border border-[#1e293b] rounded"
+            >
+              <option value="">All Services</option>
+
+              {services.map((s) => (
+                <option key={s._id} value={s._id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          )}
+
+          <button
+            onClick={() => {
+              setIsOpen(true);
+              setForm({});
+              setEditId(null);
+            }}
+            className="bg-[#2563EB] px-4 py-2 rounded hover:bg-[#7C3AED]"
+          >
+            + Add
+          </button>
+        </div>
       </div>
 
       {/* TABS */}
@@ -138,39 +177,32 @@ export default function PricingManager() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {activeTab === "category" &&
           categories.map((c) => (
-            <Card item={c} onEdit={handleEdit} onDelete={handleDelete} />
+            <Card
+              key={c._id}
+              item={c}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))}
 
         {activeTab === "plan" &&
-          categories.map((cat) => {
-            const filteredPlans = plans.filter(
-              (p) => p.category === cat._id || p.category?._id === cat._id,
-            );
+          filteredPlans.map((p) => (
+            <Card
+              key={p._id}
+              item={p}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
 
-            if (filteredPlans.length === 0) return null;
-
-            return (
-              <div key={cat._id} className="col-span-full">
-                <h3 className="text-xl font-bold text-[#38BDF8] mb-3">
-                  {cat.name}
-                </h3>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredPlans.map((p) => (
-                    <Card
-                      key={p._id}
-                      item={p}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                    />
-                  ))}
-                </div>
-              </div>
-            );
-          })}
         {activeTab === "addon" &&
           addons.map((a) => (
-            <Card item={a} onEdit={handleEdit} onDelete={handleDelete} />
+            <Card
+              key={a._id}
+              item={a}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))}
       </div>
 
@@ -213,7 +245,7 @@ export default function PricingManager() {
                 />
 
                 {/* CATEGORY */}
-                <select
+                {/* <select
                   name="category"
                   value={form.category || ""}
                   onChange={handleChange}
@@ -223,6 +255,21 @@ export default function PricingManager() {
                   {categories.map((c) => (
                     <option key={c._id} value={c._id}>
                       {c.name}
+                    </option>
+                  ))}
+                </select> */}
+
+                <select
+                  name="service"
+                  value={form.service || ""}
+                  onChange={handleChange}
+                  className={inputStyle}
+                >
+                  <option value="">Select Service</option>
+
+                  {services.map((s) => (
+                    <option key={s._id} value={s._id}>
+                      {s.name} ({s.category?.name})
                     </option>
                   ))}
                 </select>
@@ -362,7 +409,7 @@ export default function PricingManager() {
 // ================= CARD COMPONENT =================
 function Card({ item, onEdit, onDelete }) {
   return (
-    <div className="bg-[#020617] p-5 rounded-xl border border-[#1e293b] relative">
+    <div className="bg-[#020617] p-4 sm:p-5 rounded-xl border border-[#1e293b] relative flex flex-col h-full">
       {/* Popular Badge */}
       {item.isPopular && (
         <span className="absolute top-2 right-2 bg-purple-600 text-xs px-2 py-1 rounded">
@@ -370,30 +417,61 @@ function Card({ item, onEdit, onDelete }) {
         </span>
       )}
 
-      <h3 className="text-lg font-bold text-[#38BDF8]">{item.name}</h3>
-      {item.basePrice && <p>₹ {item.basePrice}</p>}
+      {/* IMAGE */}
+      {item.service?.image && (
+        <img
+          src={ item.service.image}
+          className="w-full h-28 sm:h-32 md:h-36 object-cover rounded mb-3"
+        />
+      )}
 
-      <p className="text-sm text-gray-400">{item.pages}</p>
-      <p className="text-sm text-gray-400">{item.deliveryTime}</p>
+      {/* TITLE */}
+      <h3 className="text-base sm:text-lg font-bold text-[#38BDF8] line-clamp-1">
+        {item.name}
+      </h3>
 
-      {/* FEATURES */}
-      <ul className="mt-3 text-sm space-y-1">
-        {item.features?.map((f, i) => (
-          <li key={i}>✔ {f}</li>
-        ))}
-      </ul>
+      {/* PRICE */}
+      {item.basePrice !== undefined && (
+        <p className="text-white font-semibold mt-1 text-sm sm:text-base">
+          ₹ {item.basePrice}
+        </p>
+      )}
 
-      {/* CTA */}
-      {/* <button className="mt-4 w-full bg-blue-600 py-2 rounded hover:bg-blue-700">
-        {item.ctaText || "Get Started"}
-      </button> */}
+      {/* INFO */}
+      <div className="text-xs sm:text-sm text-gray-400 mt-1 space-y-1">
+        {item.pages && <p>📄 {item.pages}</p>}
+        {item.deliveryTime && <p>⏱ {item.deliveryTime}</p>}
+      </div>
 
-      <div className="flex justify-between mt-4">
-        <button onClick={() => onEdit(item)} className="text-[#38BDF8]">
+      {/* FEATURES (SCROLLABLE 🔥) */}
+      <div className="mt-3 flex-1 overflow-y-auto pr-1 max-h-28 sm:max-h-32 scrollbar-thin scrollbar-thumb-[#1e293b]">
+        <ul className="text-xs sm:text-sm space-y-1">
+          {item.features?.map((f, i) => (
+            <li key={i} className="text-gray-300">
+              ✔ {f}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* SERVICE NAME */}
+      <p className="text-[11px] sm:text-xs text-gray-500 mt-2 truncate">
+        {item.service?.name}
+      </p>
+
+      {/* BUTTONS */}
+      <div className="flex justify-between mt-3 pt-2 border-t border-[#1e293b]">
+        <button
+          onClick={() => onEdit(item)}
+          className="text-[#38BDF8] text-xs sm:text-sm hover:underline"
+        >
           Edit
         </button>
 
-        <button onClick={() => onDelete(item._id)} className="text-red-400">
+        <button
+          onClick={() => onDelete(item._id)}
+          className="text-red-400 text-xs sm:text-sm hover:underline"
+        >
           Delete
         </button>
       </div>

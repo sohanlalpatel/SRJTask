@@ -9,6 +9,9 @@ const FloatingContact = () => {
   return (
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-3">
       {/* Chatbot */}
+
+
+      
       <button
         onClick={() => setIsChatOpen(true)}
         className="group relative bg-gradient-to-r from-[#7C3AED] to-[#2563EB] text-white p-4 rounded-full shadow-lg hover:scale-110 transition"

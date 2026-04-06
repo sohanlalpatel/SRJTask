@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const pricingPlanSchema = new mongoose.Schema({
-    category: {
+    service: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "PricingCategory",
+        ref: "Service",
         required: true,
     },
 

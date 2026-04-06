@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import logo from "../../../assets/logo1.png";
+import logo from "../../../assets/dd.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +34,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         {/* LOGO */}
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-14 h-14 rounded-full overflow-hidden transition duration-300 group-hover:scale-110">
+          <div className="w-14 h-14   overflow-hidden transition duration-300 group-hover:scale-110">
             <img src={logo} alt="logo" className="w-full h-full object-cover" />
           </div>
 

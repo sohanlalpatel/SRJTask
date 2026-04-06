@@ -10,6 +10,7 @@ import {
   Newspaper,
   Briefcase,
   MessageCircle,
+  Building2,
 } from "lucide-react";
 import ServiceManager from "./Servicemanager";
 import logo from "../../assets/logo.png"
@@ -17,6 +18,8 @@ import BlogManager from "./BlogManager";
 import PricingManager from "./PricingManager";
 import { FaMoneyBill } from "react-icons/fa";
 import AdminContact from "./Contacttable";
+import Industries from "../pages/Industries/Industries";
+import IndustryManager from "./IndustryManager";
  
 export function Dashbaord() {
   const navigate = useNavigate();
@@ -166,6 +169,7 @@ export function Dashbaord() {
                 { label: "Blogs Manager", icon: Newspaper },
                 { label: "Services", icon: Briefcase },
                 { label: "Pricing", icon: FaMoneyBill },
+                { label: "Industry", icon: Building2 },
                 { label: "Contact form query", icon: MessageCircle },
               ].map(({ label, icon: Icon }) => (
                 <button
@@ -276,6 +280,7 @@ export function Dashbaord() {
           {activeView === "Blogs Manager" && <BlogManager />}
           {activeView === "Services" && <ServiceManager />}
           {activeView === "Pricing" && <PricingManager />}
+          {activeView === "Industry" && <IndustryManager />}
           {activeView === "Contact form query" && <AdminContact />}
         </main>
       </div>

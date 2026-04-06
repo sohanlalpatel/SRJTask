@@ -15,6 +15,7 @@ const ContactUs = () => {
     name: "",
     email: "",
     phone: "",
+    service: "",
     message: "",
   });
 
@@ -36,6 +37,7 @@ const ContactUs = () => {
       !formData.name ||
       !formData.email ||
       !formData.phone ||
+      !formData.service ||
       !formData.message
     ) {
       alert("Please fill all fields");
@@ -57,6 +59,7 @@ const ContactUs = () => {
         name: "",
         email: "",
         phone: "",
+        service: "",
         message: "",
       });
     } catch (error) {
@@ -73,13 +76,13 @@ const ContactUs = () => {
 
       <div className="bg-[#0F172A] text-white min-h-screen">
         {/* HERO */}
-        <div className="bg-gradient-to-r from-[#0F172A] via-[#2563EB] to-[#7C3AED] py-16 px-6 text-center">
+        <div className="bg-gradient-to-r from-[#0F172A] via-[#2563EB] to-[#7C3AED] pt-34 py-16 px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Contact SRJ Global Technology
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto">
             Have a project in mind? Let’s talk. We’re here to help you grow your
-            business 🚀
+            business
           </p>
         </div>
 
@@ -116,6 +119,73 @@ const ContactUs = () => {
                 placeholder="Phone Number"
                 className="w-full bg-[#0F172A] border border-gray-700 p-3 rounded-lg focus:ring-2 focus:ring-[#2563EB]"
               />
+
+              <select
+                name="service"
+                value={formData.service}
+                onChange={handleChange}
+                className="w-full bg-[#0F172A] border border-gray-700 p-3 rounded-lg focus:ring-2 focus:ring-[#2563EB]"
+              >
+                <option value="">Select Service</option>
+
+                {/* GAME DEVELOPMENT */}
+                <option value="Casino Game Development">
+                  Casino Game Development
+                </option>
+                <option value="Unity Game Development">
+                  Unity Game Development
+                </option>
+                <option value="Spin & Fun Games">Spin & Fun Games</option>
+                <option value="Matka Game">Matka Game</option>
+                <option value="Roulette Game">Roulette Game</option>
+                <option value="Andar Bahar Game">Andar Bahar Game</option>
+                <option value="Aviator Game">Aviator Game</option>
+                <option value="Teen Patti Game">Teen Patti Game</option>
+                <option value="Color Prediction Game">
+                  Color Prediction Game
+                </option>
+                <option value="Game Clone Development">
+                  Game Clone Development
+                </option>
+
+                {/* PLATFORM BASED */}
+                <option value="Web Game Development">
+                  Web Game Development
+                </option>
+                <option value="App Game Development">
+                  App Game Development
+                </option>
+                <option value="Android Game Development">
+                  Android Game Development
+                </option>
+                <option value="iOS Game Development">
+                  iOS Game Development
+                </option>
+                <option value="Flutter Game Development">
+                  Flutter Game Development
+                </option>
+
+                {/* SOFTWARE */}
+                <option value="ERP Software">ERP Software</option>
+                <option value="Inventory Management">
+                  Inventory Management
+                </option>
+                <option value="Billing Software">Billing Software</option>
+
+                {/* WEB SERVICES */}
+                <option value="Website Development">Website Development</option>
+                <option value="E-commerce Website">E-commerce Website</option>
+                <option value="B2B Website">B2B Website</option>
+                <option value="B2C Website">B2C Website</option>
+
+                {/* DESIGN */}
+                <option value="Logo Design">Logo Design</option>
+                <option value="UI/UX Design">UI/UX Design</option>
+
+                {/* HOSTING */}
+                <option value="Domain & Hosting">Domain & Hosting</option>
+                <option value="Domain Renewal">Domain Renewal</option>
+              </select>
 
               <textarea
                 name="message"

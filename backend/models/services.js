@@ -10,6 +10,13 @@ const serviceSchema = new mongoose.Schema(
             trim: true,
         },
 
+
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "PricingCategory",
+            required: true,
+        },
+
         slug: {
             type: String,
             unique: true,

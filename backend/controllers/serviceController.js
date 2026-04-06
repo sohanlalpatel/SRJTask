@@ -1,59 +1,50 @@
 const Service = require("../models/services");
-
 const slugify = require("slugify");
 
-
+// CREATE
 exports.createService = async (req, res) => {
     try {
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+
+        if (!req.body.category || req.body.category === "") {
+            return res.status(400).json({ error: "Category is required" });
+        }
+
+        let slug = slugify(req.body.name, { lower: true });
+
+        const existing = await Service.findOne({ slug });
+        if (existing) {
+            slug = slug + "-" + Date.now();
+        }
+
         const service = await Service.create({
             ...req.body,
-            slug: req.body.name.toLowerCase().replace(/ /g, "-"),
+            slug,
             image: req.file
                 ? `/uploads/services/${req.file.filename}`
                 : "",
-            features: req.body.features
-                ? req.body.features.split(",")
+            features: typeof req.body.features === "string"
+                ? req.body.features.split(",").map(f => f.trim())
                 : [],
         });
 
         res.json({ success: true, data: service });
+
     } catch (err) {
+        console.error("CREATE ERROR:", err); // 🔥 IMPORTANT
         res.status(500).json({ error: err.message });
     }
 };
-
-
-exports.updateService = async (req, res) => {
+// GET BY CATEGORY
+exports.getServicesByCategory = async (req, res) => {
     try {
-        let updateData = { ...req.body };
-
-        if (req.file) {
-            updateData.image = `/uploads/services/${req.file.filename}`;
-        }
-
-        if (req.body.features) {
-            updateData.features = req.body.features.split(",");
-        }
-
-        const service = await Service.findByIdAndUpdate(
-            req.params.id,
-            updateData,
-            { new: true }
-        );
-
-        res.json({ success: true, data: service });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
-
- 
-
-// GET ALL SERVICES
-exports.getAllServices = async (req, res) => {
-    try {
-        const services = await Service.find({ isActive: true }).sort({ order: 1 });
+        const services = await Service.find({
+            category: req.params.categoryId,
+            isActive: true,
+        })
+            .populate("category") // ✅ IMPORTANT
+            .sort({ order: 1 });
 
         res.json({
             success: true,
@@ -61,14 +52,31 @@ exports.getAllServices = async (req, res) => {
             data: services,
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
-// GET SINGLE SERVICE BY SLUG
+// GET ALL
+exports.getAllServices = async (req, res) => {
+    try {
+        const services = await Service.find({ isActive: true })
+            .populate("category")
+            .sort({ order: 1 });
+
+        res.json({
+            success: true,
+            data: services,
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// GET SINGLE
 exports.getServiceBySlug = async (req, res) => {
     try {
-        const service = await Service.findOne({ slug: req.params.slug });
+        const service = await Service.findOne({ slug: req.params.slug })
+            .populate("category"); // ✅ IMPORTANT
 
         if (!service) {
             return res.status(404).json({ success: false, message: "Service not found" });
@@ -79,13 +87,46 @@ exports.getServiceBySlug = async (req, res) => {
             data: service,
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
- 
+// UPDATE
+exports.updateService = async (req, res) => {
+    try {
+        let updateData = { ...req.body };
 
-// DELETE SERVICE
+        if (req.file) {
+            updateData.image = `/uploads/services/${req.file.filename}`;
+        }
+
+        if (typeof req.body.features === "string") {
+            updateData.features = req.body.features.split(",").map(f => f.trim());
+        }
+
+        if (req.body.name) {
+            updateData.slug = slugify(req.body.name, { lower: true }); // ✅ FIXED
+        }
+
+        const service = await Service.findByIdAndUpdate(
+            req.params.id,
+            updateData,
+            {
+                returnDocument: "after",
+                runValidators: true,
+            }
+        );
+
+        res.json({ success: true, data: service });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+
+
+
+// DELETE
 exports.deleteService = async (req, res) => {
     try {
         const service = await Service.findByIdAndDelete(req.params.id);
@@ -99,6 +140,6 @@ exports.deleteService = async (req, res) => {
             message: "Service deleted successfully",
         });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
