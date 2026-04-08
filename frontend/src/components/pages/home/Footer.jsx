@@ -18,6 +18,7 @@ const quickLinks = [
   { name: "About Us", path: "/about" },
   { name: "Contact", path: "/contact" },
   { name: "Pricing", path: "/pricing" },
+  { name: "Admin", path: "/srj/admin/login" },
 ];
 
 const legalLinks = [
