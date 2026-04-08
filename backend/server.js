@@ -13,6 +13,9 @@ const addonRoutes = require("./routers/addonRoutes");
 const contactRoutes = require("./routers/contactRouter");
 const chatRoutes = require("./routers/chatroutes");
 const industryRoutes = require("./routers/industryRoutes");
+const enquiryRoutes = require("./routers/enquiryRoutes");
+const orderRoutes = require("./routers/orderRoutes");
+
 
 dotenv.config();
 
@@ -20,7 +23,7 @@ const app = express();
 
  app.use(express.json());
 app.use(cors());
- 
+app.use(express.urlencoded({ extended: true }));
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
@@ -35,10 +38,11 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/addons", addonRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/chat", require("./routers/chatroutes"));
+app.use("/api/twilio", require("./routers/twilioWebhook"));
 app.use("/api/industries", industryRoutes);
-
-
+app.use("/api/enquiries", enquiryRoutes);
+ app.use("/api/orders", orderRoutes);
 
 
 

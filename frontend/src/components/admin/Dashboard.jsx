@@ -11,6 +11,7 @@ import {
   Briefcase,
   MessageCircle,
   Building2,
+  ListOrdered,
 } from "lucide-react";
 import ServiceManager from "./Servicemanager";
 import logo from "../../assets/logo.png"
@@ -20,6 +21,9 @@ import { FaMoneyBill } from "react-icons/fa";
 import AdminContact from "./Contacttable";
 import Industries from "../pages/Industries/Industries";
 import IndustryManager from "./IndustryManager";
+import AdminEnquiries from "./Adminenquiries";
+import { FaServicestack } from "react-icons/fa6";
+import AdminOrders from "./Adminorders";
  
 export function Dashbaord() {
   const navigate = useNavigate();
@@ -164,8 +168,8 @@ export function Dashbaord() {
             )}
             <nav className="space-y-1  ">
               {[
-                { label: "Dashboard", icon: Home },
-
+                { label: "Service Enquiry", icon: FaServicestack },
+                { label: "Service Orders", icon: ListOrdered },
                 { label: "Blogs Manager", icon: Newspaper },
                 { label: "Services", icon: Briefcase },
                 { label: "Pricing", icon: FaMoneyBill },
@@ -277,6 +281,8 @@ export function Dashbaord() {
 
         {/* Main Content Area */}
         <main className="flex-1  sm:p- bg-gray-50 overflow-y-auto">
+          {activeView === "Service Enquiry" && <AdminEnquiries />}
+          {activeView === "Service Orders" && < AdminOrders />}
           {activeView === "Blogs Manager" && <BlogManager />}
           {activeView === "Services" && <ServiceManager />}
           {activeView === "Pricing" && <PricingManager />}

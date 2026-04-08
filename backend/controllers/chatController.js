@@ -1,57 +1,209 @@
+ const twilio = require('twilio');
+const Chat = require('../models/Chat');
+const fetch = require("node-fetch");
+ 
+
+// ✅ QUICK REPLIES
+const quickReplies = (msg) => {
+    msg = msg.toLowerCase();
+
+    if (msg.includes("price") || msg.includes("cost")) {
+        return {
+            reply: "💰 Pricing Plans:\nStarter: ₹15,000\nPro: ₹45,000\nEnterprise: Custom",
+            suggestions: ["Starter Plan", "Enterprise Plan", "Contact Team"]
+        };
+    }
+
+    if (msg.includes("contact")) {
+        return {
+            reply: "📞 +91-99999-99999\nhello@srjglobal.com",
+            suggestions: ["Call now", "WhatsApp"]
+        };
+    }
+
+    return null;
+};
+
+const SYSTEM_PROMPT = `
+You are SRJ Global AI Assistant.
+
+Company Info:
+- Name: SRJ Global (India)
+- Services:
+  • Web Development (React, Node.js)
+  • App Development (Flutter, React Native)
+  • Digital Marketing
+  • AI/ML Solutions
+  • Cloud & DevOps
+
+- Pricing:
+  Starter: ₹15,000
+  Professional: ₹45,000
+  Enterprise: Custom
+
+- Pages:
+  Home, Services, About, Industries, Blog, Pricing
+
+Rules:
+- Reply in Hinglish / Hindi / English (same as user)
+- Keep answer short & helpful
+- If pricing → explain plans clearly
+- If services → list services properly
+- Always act like company assistant
+
+Return JSON:
+{
+ "reply": "...",
+ "actions": [],
+ "suggestions": []
+}
+`;
+
+
+// ================== 🌐 WEB CHAT ==================
 exports.chatWithAI = async (req, res) => {
     try {
-        const { message } = req.body;
-        const msg = message.toLowerCase();
+        const { message, sessionId } = req.body;
 
-        // 🔥 Smart responses with suggestions
-        if (msg.includes("about") || msg.includes("company")) {
+        if (!message) {
             return res.json({
-                reply:
-                    "SRJ Global is a software company specializing in Web Development, Mobile Apps, Digital Marketing, and AI solutions.",
-                suggestions: ["Our Services", "Pricing", "Contact"],
+                reply: "Please type something 😊",
+                actions: [],
+                suggestions: []
             });
         }
 
-        if (msg.includes("service")) {
-            return res.json({
-                reply:
-                    "We offer:\n• Web Development\n• App Development\n• Digital Marketing\n• AI Solutions",
-                suggestions: ["Pricing", "Contact Us", "About Company"],
+        // ⚡ quick reply
+        const quick = quickReplies(message);
+        if (quick) return res.json(quick);
+
+        // 🧠 history
+        const history = await Chat.find({ sessionId })
+            .sort({ createdAt: -1 })
+            .limit(6);
+
+        const messages = history.reverse().flatMap(h => ([
+            { role: "user", content: h.userMessage },
+            { role: "assistant", content: h.botReply }
+        ]));
+
+        messages.push({ role: "user", content: message });
+
+        let data;
+
+
+        try {
+            const aiRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "mistralai/mistral-7b-instruct", // ✅ free model
+                    messages: [
+                        { role: "system", content: SYSTEM_PROMPT },
+                        { role: "user", content: message }
+                    ]
+                })
             });
+
+            const aiData = await aiRes.json();
+
+            console.log("AI RESPONSE:", aiData);
+
+            // ✅ ERROR HANDLE (IMPORTANT)
+            if (aiData.error) {
+                throw new Error(aiData.error.message);
+            }
+
+            const replyText = aiData?.choices?.[0]?.message?.content;
+
+            data = {
+                reply: replyText || "No response from AI",
+                actions: [],
+                suggestions: ["Pricing", "Services", "Contact"]
+            };
+
+        } catch (err) {
+            console.error("AI ERROR:", err.message);
+
+            // 🔥 SMART FALLBACK (SRJ DATA)
+            data = {
+                reply: `SRJ Global services:
+• Web Development
+• App Development
+• Digital Marketing
+• AI Solutions
+
+💰 Pricing:
+Starter ₹15,000
+Pro ₹45,000
+Enterprise Custom
+
+📞 Contact: +91-99999-99999`,
+                suggestions: ["Pricing", "Services", "Contact"]
+            };
         }
 
-        if (msg.includes("price") || msg.includes("cost") || msg.includes("pricing")) {
-            return res.json({
-                reply:
-                    "Pricing depends on your requirements. Click below to get a custom quote 👇",
-                actions: [
-                    { label: "📞 Contact Us", link: "/contact", type: "internal" },
-                    { label: "💬 WhatsApp", link: "https://wa.me/919999999999", type: "external" },
-                ],
-            });
-        }
-
-        if (msg.includes("contact")) {
-            return res.json({
-                reply: "You can reach us instantly 👇",
-                actions: [
-                    { label: "📞 Contact Us", link: "/contact", type: "internal" },
-                    { label: "💬 WhatsApp", link: "https://wa.me/919999999999", type: "external" },
-                ],
-            });
-        }
-
-        // ❌ fallback (AI-like)
-        return res.json({
-            reply:
-                "I can assist you with SRJ Global services, pricing, and contact details. What would you like to know?",
-            suggestions: ["Our Services", "About Company", "Contact"],
-            actions: [
-                { label: "💬 WhatsApp", link: "https://wa.me/919999999999", type: "external" },
-            ],
+        // 💾 save
+        await Chat.create({
+            sessionId,
+            userMessage: message,
+            botReply: data.reply
         });
 
-    } catch (error) {
-        res.status(500).json({ error: "Server error" });
+        res.json(data);
+
+    } catch (err) {
+        console.error(err);
+        res.json({
+            reply: "Server error 😢",
+            actions: [],
+            suggestions: []
+        });
     }
+};
+
+// ================== 📱 WHATSAPP ==================
+exports.whatsappWebhook = async (req, res) => {
+    const twiml = new twilio.twiml.MessagingResponse();
+
+    const incomingMsg = req.body.Body;
+    const from = req.body.From;
+
+    try {
+        // ⚡ quick reply
+        const quick = quickReplies(incomingMsg);
+        if (quick) {
+            twiml.message(quick.reply);
+            return res.type('text/xml').send(twiml.toString());
+        }
+
+        // 🤖 AI call
+        // const ai = await client.messages.create({
+        //     model: "claude-3-haiku-20240307",
+        //     max_tokens: 200,
+        //     system: SYSTEM_PROMPT + "\nReturn ONLY plain text.",
+        //     messages: [{ role: "user", content: incomingMsg }]
+        // });
+
+        const replyText = "Thanks for contacting SRJ Global! 😊";
+
+        // 💾 save
+        await Chat.create({
+            sessionId: from,
+            channel: "whatsapp",
+            userMessage: incomingMsg,
+            botReply: replyText
+        });
+
+        twiml.message(replyText);
+
+    } catch (err) {
+        console.error(err);
+        twiml.message("Server issue 😢 try again later");
+    }
+
+    res.type('text/xml').send(twiml.toString());
 };

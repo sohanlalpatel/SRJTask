@@ -51,7 +51,7 @@ const Navbar = () => {
         </Link>
 
         {/* DESKTOP MENU */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-6">
           {navLinks.map((link, i) => (
             <NavLink key={i} to={link.path}>
               {({ isActive }) => (
@@ -73,7 +73,7 @@ const Navbar = () => {
         </div>
 
         {/* CTA BUTTON */}
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <Link to="/contact">
             <button className="relative px-6 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold overflow-hidden group">
               <span className="relative z-10">Contact Us</span>
@@ -85,7 +85,7 @@ const Navbar = () => {
         </div>
 
         {/* MOBILE MENU BUTTON */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? (
               <X size={28} className={scrolled ? "text-black" : "text-white"} />
@@ -101,7 +101,7 @@ const Navbar = () => {
 
       {/* MOBILE MENU */}
       <div
-        className={`md:hidden transition-all duration-500 ${
+        className={`lg:hidden transition-all duration-500 ${
           isOpen
             ? "max-h-[400px] opacity-100"
             : "max-h-0 overflow-hidden opacity-0"
@@ -120,7 +120,7 @@ const Navbar = () => {
           ))}
 
           <Link to="/contact">
-            <button className="bg-blue-600 text-white py-2 rounded-lg mt-2">
+            <button className="bg-blue-600 text-white py-2 p-2 rounded-lg mt-2">
               Contact Us
             </button>
           </Link>

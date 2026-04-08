@@ -1,45 +1,39 @@
-import {
-  Monitor,
-  Megaphone,
-  ShieldCheck,
-  Palette,
-  BarChart3,
-} from "lucide-react";
-import Navbar from "./home/Navbar";
-import Footer from "./home/Footer";
+import { Monitor, Megaphone, Palette, Gamepad2, Server } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const services = [
   {
-    title: "Product Development",
-    desc: "Providing the best IT solutions for modern businesses.",
+    title: "Game Development",
+    desc: "Casino games, Aviator, Teen Patti, Andhar Bahar, Roulette, Unity & mobile game development solutions.",
+    icon: <Gamepad2 size={28} />,
+  },
+  {
+    title: "Web & App Development",
+    desc: "Custom websites, B2B/B2C platforms, eCommerce solutions, and mobile app development for Android & iOS.",
     icon: <Monitor size={28} />,
   },
   {
-    title: "Digital Marketing",
-    desc: "Creative & full-service digital marketing solutions.",
-    icon: <Megaphone size={28} />,
+    title: "Software & ERP Solutions",
+    desc: "Inventory management, ERP systems, billing software and scalable enterprise solutions.",
+    icon: <Server size={28} />,
   },
   {
-    title: "Security System",
-    desc: "Advanced security systems for scalable protection.",
-    icon: <ShieldCheck size={28} />,
-  },
-  {
-    title: "UI/UX Designing",
-    desc: "Modern, intuitive and minimal web designs.",
+    title: "UI/UX & Graphic Design",
+    desc: "Modern UI/UX design, logo designing, branding and creative digital experiences.",
     icon: <Palette size={28} />,
   },
   {
-    title: "Data Analysis",
-    desc: "Turn data into powerful business insights.",
-    icon: <BarChart3 size={28} />,
+    title: "Digital Marketing",
+    desc: "SEO, social media marketing, ads campaigns and growth strategies to boost your business.",
+    icon: <Megaphone size={28} />,
   },
 ];
 
 export default function Services() {
+  const navigate = useNavigate();
+
   return (
     <>
-    
       <section className="relative py-20 bg-gradient-to-br from-[#0F172A] via-[#1e1b4b] to-[#0F172A] overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_#38BDF8_1px,_transparent_1px)] [background-size:22px_22px]" />
@@ -68,7 +62,8 @@ export default function Services() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="relative bg-[#111827] border border-gray-800 p-6 pt-12 rounded-xl text-center 
+                onClick={() => navigate("/services")} // 🔥 REDIRECT
+                className="cursor-pointer relative bg-[#111827] border border-gray-800 p-6 pt-12 rounded-xl text-center 
               hover:-translate-y-2 hover:border-[#7C3AED] transition duration-300"
               >
                 {/* Icon Circle */}
@@ -93,7 +88,6 @@ export default function Services() {
           </div>
         </div>
       </section>
-      
     </>
   );
 }

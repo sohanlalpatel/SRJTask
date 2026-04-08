@@ -117,14 +117,14 @@ const team = [
               <div className="flex gap-4">
                 <button
                   onClick={() => navigate("/pricing")}
-                  className="bg-gradient-to-r from-[#2563EB] to-[#38BDF8] px-6 py-3 rounded-lg"
+                  className="border border-[#1e293b] px-6 py-3 rounded-lg hover:bg-[#020617]"
                 >
                   Get Started
                 </button>
 
-                <button className="border border-[#1e293b] px-6 py-3 rounded-lg hover:bg-[#020617]">
+                {/* <button className="border border-[#1e293b] px-6 py-3 rounded-lg hover:bg-[#020617]">
                   View Projects
-                </button>
+                </button> */}
               </div>
 
               {/* Small stats */}
@@ -230,6 +230,7 @@ const team = [
               ].map((project, i) => (
                 <div
                   key={i}
+                  onClick={() => navigate("/services")}
                   className="group relative overflow-hidden rounded-2xl cursor-pointer"
                 >
                   {/* IMAGE */}

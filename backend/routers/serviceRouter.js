@@ -8,7 +8,8 @@ const {
     getServiceBySlug,
     updateService,
     deleteService,
-    getServicesByCategory, // ✅ ADD
+    getServicesByCategory,
+    getServiceById, // ✅ ADD
 } = require("../controllers/serviceController");
 
 // CREATE
@@ -22,6 +23,8 @@ router.get("/getAllServices", getAllServices);
 
 // 🔥 GET BY CATEGORY (IMPORTANT)
 router.get("/category/:categoryId", getServicesByCategory);
+
+router.get("/getServiceById/:id", getServiceById);
 
 // GET SINGLE
 router.get("/getServiceBySlug/:slug", getServiceBySlug);

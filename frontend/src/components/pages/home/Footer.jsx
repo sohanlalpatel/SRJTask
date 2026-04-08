@@ -22,7 +22,7 @@ const quickLinks = [
 
 const legalLinks = [
   { name: "Privacy Policy", path: "/privacy" },
-  { name: "Terms of Service", path: "/terms" },
+  { name: "Terms of Service", path: "/service-policy" },
   { name: "Cookies Policy", path: "/cookies" },
 ];
 
@@ -36,6 +36,54 @@ const legalLinks = [
       </div>
 
       <div className="relative max-w-7xl mx-auto px-6">
+        {/* 🔥 FOOTER ADVERTISEMENT (TOP CTA) */}
+        <div className="mb-14">
+          <div
+            className="relative bg-gradient-to-r from-[#5872ab] via-[#4F46E5] to-[#7C3AED] 
+    rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl"
+          >
+            {/* Glow Effect */}
+            <div className="absolute inset-0 opacity-30 blur-2xl bg-gradient-to-r from-[#2563EB] to-[#7C3AED] rounded-2xl"></div>
+
+            {/* LEFT CONTENT */}
+            <div className="relative z-10 max-w-xl text-center lg:text-left">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">
+                   Build Your Digital Product with Experts
+              </h3>
+
+              <p className="text-white/80 mt-2 text-sm sm:text-base">
+                Get high-quality websites, apps, and software solutions tailored
+                to your business. Start your project today with SRJ Global
+                Technologies.
+              </p>
+            </div>
+
+            {/* RIGHT CTA */}
+            <div className="relative z-10 flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              {/* PRIMARY CTA */}
+              <button
+                onClick={() =>
+                  window.open(
+                    "https://wa.me/918357965638?text=Hello, I want to build a project",
+                    "_blank",
+                  )
+                }
+                className="px-6 py-3 rounded-xl bg-white text-[#1E293B] font-semibold hover:scale-105 transition"
+              >
+                Get Free Quote
+              </button>
+
+              {/* SECONDARY CTA */}
+              <button
+                onClick={() => (window.location.href = "/pricing")}
+                className="px-6 py-3 rounded-xl border border-white/40 text-white font-semibold hover:bg-white/10 transition"
+              >
+                View Pricing
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* GRID */}
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-5">
           {/* 🏢 COMPANY */}
@@ -171,8 +219,6 @@ const legalLinks = [
           © 2026 SRJ Global Technologies. All rights reserved.
         </div>
       </div>
-
-     
     </footer>
   );
 }

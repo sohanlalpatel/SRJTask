@@ -36,6 +36,24 @@ exports.createService = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+
+exports.getServiceById = async (req, res) => {
+    try {
+        const service = await Service.findById(req.params.id)
+            .populate("category");
+
+        if (!service) {
+            return res.status(404).json({ success: false, message: "Service not found" });
+        }
+
+        res.json({ success: true, data: service });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 // GET BY CATEGORY
 exports.getServicesByCategory = async (req, res) => {
     try {

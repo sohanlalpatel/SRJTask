@@ -290,157 +290,147 @@ const handleEdit = (service) => {
 
       {/* MODAL */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white w-full max-w-xl rounded-xl p-6">
-            <h3 className="text-xl font-semibold mb-4">
-              {editId ? "Edit Service" : "Add Service"}
-            </h3>
-
-            <div className="space-y-3">
-              <input
-                name="name"
-                placeholder="Service Name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              <select
-                name="category"
-                value={form.category}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              >
-                <option value="">Select Category</option>
-
-                {categories.map((cat) => (
-                  <option key={cat._id} value={cat._id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-
-              <input
-                name="shortDescription"
-                placeholder="Short Description"
-                value={form.shortDescription}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              <textarea
-                name="description"
-                placeholder="Full Description"
-                value={form.description}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              {/* SLUG */}
-              <input
-                name="slug"
-                placeholder="Slug (auto or manual)"
-                value={form.slug}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              {/* PRICE */}
-              <input
-                name="price"
-                placeholder="Price (e.g. Starting ₹9,999)"
-                value={form.price}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              {/* ORDER */}
-              <input
-                name="order"
-                placeholder="Order (1,2,3)"
-                value={form.order}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              {/* <input
-                name="price"
-                placeholder="Price"
-                value={form.price}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              /> */}
-              {/* <input
-                name="icon"
-                placeholder="Icon Name (e.g. Monitor, Code, Globe)"
-                value={form.icon || ""}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              /> */}
-              <select
-                name="icon"
-                value={form.icon || ""}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              >
-                <option value="">Select Service Icon</option>
-
-                <option value="Monitor">Website Designing</option>
-                <option value="Palette">Graphic Designing</option>
-                <option value="PenTool">Logo Designing</option>
-                <option value="Layout">Custom Website Design</option>
-                <option value="Code">Web Development</option>
-                <option value="ShoppingCart">E-Commerce Development</option>
-                <option value="Smartphone">App Development</option>
-                <option value="Gamepad2">Game Development</option>
-                <option value="Globe">WordPress Development</option>
-                <option value="Megaphone">Digital Marketing</option>
-                <option value="Search">SEO</option>
-                <option value="MousePointerClick">PPC Advertising</option>
-                <option value="FileText">Content Writing</option>
-                <option value="Server">Web Hosting</option>
-                <option value="MessageSquare">Bulk SMS</option>
-                <option value="MessageCircle">WhatsApp Marketing</option>
-                <option value="Globe">Domain Registration</option>
-              </select>
-              <input
-                type="file"
-                name="serviceImage"
-                onChange={(e) =>
-                  setForm({ ...form, serviceImage: e.target.files[0] })
-                }
-                className="w-full border p-2 rounded"
-              />
-
-              <input
-                name="features"
-                placeholder="Features (comma separated)"
-                value={form.features}
-                onChange={handleChange}
-                className="w-full border p-2 rounded"
-              />
-
-              {/* Toggle */}
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  name="isActive"
-                  checked={form.isActive}
-                  onChange={handleChange}
-                />
-                Active Service
-              </label>
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 px-3 sm:px-6">
+          {/* MODAL BOX */}
+          <div className="bg-white w-full max-w-xl md:max-w-2xl lg:max-w-3xl rounded-xl shadow-xl flex flex-col max-h-[90vh]">
+            {/* HEADER */}
+            <div className="p-4 sm:p-6 border-b">
+              <h3 className="text-lg sm:text-xl font-semibold">
+                {editId ? "Edit Service" : "Add Service"}
+              </h3>
             </div>
 
-            {/* BUTTONS */}
-            <div className="flex justify-end mt-5 gap-3">
-              <button onClick={resetForm} className="px-4 py-2 border rounded">
+            {/* SCROLLABLE BODY 🔥 */}
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4">
+              {/* INPUTS GRID */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <input
+                  name="name"
+                  placeholder="Service Name"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                />
+
+                <select
+                  name="category"
+                  value={form.category}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((cat) => (
+                    <option key={cat._id} value={cat._id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+
+                <input
+                  name="shortDescription"
+                  placeholder="Short Description"
+                  value={form.shortDescription}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded sm:col-span-2"
+                />
+
+                <textarea
+                  name="description"
+                  placeholder="Full Description"
+                  value={form.description}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded sm:col-span-2"
+                  rows={4}
+                />
+
+                <input
+                  name="slug"
+                  placeholder="Slug"
+                  value={form.slug}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                />
+
+                <input
+                  name="price"
+                  placeholder="Price"
+                  value={form.price}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                />
+
+                <input
+                  name="order"
+                  placeholder="Order"
+                  value={form.order}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded"
+                />
+
+                <select
+                  name="icon"
+                  value={form.icon || ""}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded sm:col-span-2"
+                >
+                  <option value="">Select Service Icon</option>
+                  <option value="Monitor">Website Designing</option>
+                  <option value="Palette">Graphic Designing</option>
+                  <option value="PenTool">Logo Designing</option>
+                  <option value="Layout">Custom Website Design</option>
+                  <option value="Code">Web Development</option>
+                  <option value="ShoppingCart">E-Commerce</option>
+                  <option value="Smartphone">App Development</option>
+                  <option value="Gamepad2">Game Development</option>
+                  <option value="Globe">WordPress</option>
+                  <option value="Megaphone">Digital Marketing</option>
+                  <option value="Search">SEO</option>
+                  <option value="MousePointerClick">PPC</option>
+                  <option value="FileText">Content Writing</option>
+                  <option value="Server">Hosting</option>
+                </select>
+
+                <input
+                  type="file"
+                  name="serviceImage"
+                  onChange={(e) =>
+                    setForm({ ...form, serviceImage: e.target.files[0] })
+                  }
+                  className="w-full border p-2 rounded sm:col-span-2"
+                />
+
+                <input
+                  name="features"
+                  placeholder="Features (comma separated)"
+                  value={form.features}
+                  onChange={handleChange}
+                  className="w-full border p-2 rounded sm:col-span-2"
+                />
+
+                <label className="flex items-center gap-2 sm:col-span-2">
+                  <input
+                    type="checkbox"
+                    name="isActive"
+                    checked={form.isActive}
+                    onChange={handleChange}
+                  />
+                  Active Service
+                </label>
+              </div>
+            </div>
+
+            {/* FOOTER */}
+            <div className="p-4 sm:p-5 border-t flex flex-col sm:flex-row justify-end gap-3">
+              <button
+                onClick={resetForm}
+                className="px-4 py-2 border rounded w-full sm:w-auto"
+              >
                 Cancel
               </button>
 
               <button
                 onClick={handleSubmit}
-                className="bg-[#2563EB] text-white px-4 py-2 rounded hover:bg-[#7C3AED]"
+                className="bg-[#2563EB] text-white px-4 py-2 rounded hover:bg-[#7C3AED] w-full sm:w-auto"
               >
                 {editId ? "Update" : "Create"}
               </button>
