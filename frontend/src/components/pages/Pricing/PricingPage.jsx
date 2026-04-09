@@ -9,11 +9,11 @@ import {
 } from "lucide-react";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
-
-const CAT_API   = "http://localhost:5000/api/categories";
-const PLAN_API  = "http://localhost:5000/api/plans";
-const ADDON_API = "http://localhost:5000/api/addons";
-const ORDER_API = "http://localhost:5000/api/orders/submitOrder";
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const CAT_API = `${BASE_URL}/api/categories`;
+const PLAN_API = `${BASE_URL}/api/plans`;
+const ADDON_API = `${BASE_URL}/api/addons`;
+const ORDER_API = `${BASE_URL}/api/orders/submitOrder`;
 
 // ─── tiny icon paths ──────────────────────────────────────────────────────────
 const P = {
@@ -802,7 +802,7 @@ export default function PricingPage() {
                     marginBottom: 18, border: sel ? "1px solid #7c3aed55" : "1px solid #1e2540",
                   }}>
                     <img
-                      src={plan.service?.image || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop"}
+                      src={`${BASE_URL}${plan.service?.image}` || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop"}
                       alt={plan.name}
                       style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s" }}
                       onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"}
