@@ -44,7 +44,12 @@ app.use("/api/industries", industryRoutes);
 app.use("/api/enquiries", enquiryRoutes);
  app.use("/api/orders", orderRoutes);
 
-
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        status: "OK",
+        message: "Server is live 🚀",
+    });
+});
 
 app.get("/", (req, res) => {
     res.send("AI Chatbot Server Running 🚀");
