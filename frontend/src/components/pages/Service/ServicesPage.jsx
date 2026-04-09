@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 
-const API = "/api/services";
-
+const API = import.meta.env.VITE_API_URL;
 export default function Services() {
   const [services, setServices] = useState([]);
   const [search, setSearch] = useState("");
@@ -16,7 +15,7 @@ export default function Services() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${API}/getAllServices`).then((res) => {
+    axios.get(`${API}/api/services/getAllServices`).then((res) => {
       setServices(res.data.data || []);
     });
   }, []);
