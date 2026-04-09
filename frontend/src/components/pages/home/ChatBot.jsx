@@ -3,7 +3,7 @@ import { X, Send, Bot, Loader2, Moon, Sun, Sparkles } from "lucide-react";
 
 // ✅ Apni FREE Gemini API key yahan daalo
 // Get it from: https://aistudio.google.com/app/apikey
-const GEMINI_API_KEY = "AIzaSyCV9CJkUn7qY9MwEhqoqdLxGNouc7jp6_E";
+const GEMINI_API_KEY = "AIzaSyC8zLTRU5QbIlg0cw5N8z5YjyIobETS0bM";
 
 const SRJ_SYSTEM_CONTEXT = `
 You are a helpful AI assistant for SRJ Global Technology.
