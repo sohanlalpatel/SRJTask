@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 
-const API = "http://localhost:5000/api/services";
+const API = "/api/services";
 
 export default function Services() {
   const [services, setServices] = useState([]);
