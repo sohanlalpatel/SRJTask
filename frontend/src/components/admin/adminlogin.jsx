@@ -51,11 +51,14 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/admin/login", {
-        email: formData.email,
-        password: formData.password,
-        // role:"admin"
-      });
+      const response = await axios.post(
+        "https://srjtask.onrender.com/api/admin/login",
+        {
+          email: formData.email,
+          password: formData.password,
+          // role:"admin"
+        },
+      );
       if (response?.data) {
         sessionStorage.setItem("admin", JSON.stringify(response.data));
         navigate("/srj/panel/dashboard");
