@@ -7,7 +7,7 @@ import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 import ServiceEnquiryModal from "./ServiceEnquiryModal";
 
-const API = "http://localhost:5000/api/services";
+const API = import.meta.env.VITE_API_BASE_URL;
 
 export default function ServiceDetail() {
   const { id } = useParams();
@@ -22,12 +22,12 @@ export default function ServiceDetail() {
   useEffect(() => {
     setLoading(true);
     window.scrollTo(0, 0);
-    axios.get(`${API}/getServiceById/${id}`).then((res) => {
+    axios.get(`${API}/api/services/getServiceById/${id}`).then((res) => {
       const svc = res.data.data;
       setService(svc);
       // Fetch similar services by same category
       axios
-        .get(`${API}/getAllServices`)
+        .get(`${API}/api/services/getAllServices`)
         .then((r) => {
           const all = r.data.data || [];
           const sim = all
@@ -76,7 +76,7 @@ export default function ServiceDetail() {
         {/* ── HERO BANNER ── */}
         <div className="relative h-[380px] md:h-[440px]     overflow-hidden">
           <img
-            src={service.image}
+            src={`${API}${service.image}`}
             alt={service.name}
             className="w-full h-full object-cover"
           />

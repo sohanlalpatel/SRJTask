@@ -161,7 +161,7 @@ export default function Services() {
                   {/* Image */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={s.image}
+                      src={`${API}${s.image}`}
                       className="w-full h-44 object-cover group-hover:scale-105 transition duration-500"
                       alt={s.name}
                     />
