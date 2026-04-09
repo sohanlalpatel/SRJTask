@@ -38,15 +38,18 @@ const Navbar = () => {
             <img src={logo} alt="logo" className="w-full h-full object-cover" />
           </div>
 
-          <div>
+          <div className="flex flex-col leading-tight">
             <h1
-              className={`font-bold transition ${
+              className={`text-xl md:text-xl font-bold tracking-wide transition duration-300 ${
                 scrolled ? "text-gray-900" : "text-white"
               }`}
             >
-              SRJ GLOBAL
+              Gaming & Software
             </h1>
-            <p className="text-xs text-blue-500 font-semibold">TECHNOLOGIES</p>
+
+            <span className="text-sm md:text-xl font-bold text-blue-500 tracking-wider">
+              Solutions
+            </span>
           </div>
         </Link>
 

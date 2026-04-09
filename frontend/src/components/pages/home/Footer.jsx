@@ -9,7 +9,7 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import { FaWhatsapp } from "react-icons/fa";
 import { MessageCircle, Briefcase } from "lucide-react";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/dd.png";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
@@ -91,9 +91,9 @@ const legalLinks = [
           <div className=" ">
             <div className="flex items-center gap-3 mb-5">
               <img src={logo} className="w-16 h-16 object-contain" />
-              <h2 className="text-2xl font-bold text-white leading-tight">
-                SRJ GLOBAL <br />
-                <span className="text-[#3B82F6]">TECHNOLOGIES</span>
+              <h2 className="text-xl font-bold text-white leading-tight">
+                Gaming & Software <br />
+                <span className="text-[#3B82F6]">Solutions</span>
               </h2>
             </div>
 
@@ -155,7 +155,7 @@ const legalLinks = [
               <p>
                 Email:{" "}
                 <span className="text-[#38BDF8]">
-                  srjglobaltechnology@gmail.com
+                  gamingsoftware@gmail.com
                 </span>
               </p>
 
@@ -217,7 +217,7 @@ const legalLinks = [
 
         {/* 🔻 DIVIDER */}
         <div className="mt-14 border-t border-white/10 pt-6 text-center text-sm text-gray-400">
-          © 2026 SRJ Global Technologies. All rights reserved.
+          © 2026 Gaming & Software Solution. All rights reserved.
         </div>
       </div>
     </footer>

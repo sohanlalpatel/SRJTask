@@ -14,7 +14,7 @@ import {
   ListOrdered,
 } from "lucide-react";
 import ServiceManager from "./Servicemanager";
-import logo from "../../assets/logo.png"
+import logo from "../../assets/dd.png"
 import BlogManager from "./BlogManager";
 import PricingManager from "./PricingManager";
 import { FaMoneyBill } from "react-icons/fa";
@@ -143,7 +143,7 @@ export function Dashbaord() {
             {!collapsed && (
               <div className="flex flex-col">
                 <span className="text-sm font-semibold text-[#F8FAFC]">
-                  SRJ Global Technology
+                 Gaming & Software Solutions
                 </span>
                 <span className="text-xs text-gray-400">Admin Management</span>
               </div>

@@ -72,11 +72,11 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#040f3f] flex items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-md xl:max-w-md space-y-8">
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-300 mb-2">
             Admin Portal
           </h1>
           <p className="text-xs sm:text-sm md:text-base text-gray-600">

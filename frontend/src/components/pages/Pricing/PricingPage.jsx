@@ -725,7 +725,7 @@ export default function PricingPage() {
           {/* ══ HERO ══ */}
           <div style={{ textAlign: "center", marginBottom: 72 }}>
             <h1 style={{ fontSize: "clamp(28px,5vw,54px)", fontWeight: 900, lineHeight: 1.12, marginBottom: 18 }}>
-              <span style={{ color: "#f1f5f9" }}>SRJ Software Company</span><br />
+              <span style={{ color: "#f1f5f9" }}>Gaming & Software Company</span><br />
               <span style={{
                 background: "linear-gradient(130deg,#a78bfa 30%,#60a5fa 100%)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
