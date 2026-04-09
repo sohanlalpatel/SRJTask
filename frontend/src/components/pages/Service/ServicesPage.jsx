@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 
-const API = import.meta.env.VITE_API_URL;
+const API = import.meta.env.VITE_API_BASE_URL;
 export default function Services() {
   const [services, setServices] = useState([]);
   const [search, setSearch] = useState("");
