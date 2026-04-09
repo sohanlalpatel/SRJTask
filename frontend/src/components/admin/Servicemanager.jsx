@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import * as Icons from "lucide-react";
-const API = "http://localhost:5000/api/services";
-
+// const API = "http://localhost:5000/api/services";
+const API = import.meta.env.VITE_API_BASE_URL;
 export default function ServiceManager() {
   const [services, setServices] = useState([]);
  const [form, setForm] = useState({
@@ -26,7 +26,7 @@ const [categories, setCategories] = useState([]);
   // ================= FETCH =================
  const fetchServices = async () => {
    try {
-     const res = await axios.get(`${API}/getAllServices`);
+     const res = await axios.get(`${API}/api/services/getAllServices`);
      setServices(res.data.data || []);
    } catch (error) {
      console.error("Error fetching services:", error);
@@ -91,9 +91,9 @@ const handleSubmit = async () => {
   }
 
   if (editId) {
-    await axios.put(`${API}/updateService/${editId}`, formData);
+    await axios.put(`${API}/api/services/updateService/${editId}`, formData);
   } else {
-    await axios.post(`${API}/createService`, formData);
+    await axios.post(`${API}/api/services/createService`, formData);
   }
 
   fetchServices();
@@ -140,7 +140,7 @@ const handleEdit = (service) => {
   // ================= DELETE =================
   const handleDelete = async (id) => {
     if (confirm("Delete this service?")) {
-      await axios.delete(`${API}/deleteService/${id}`);
+      await axios.delete(`${API}/api/services/deleteService/${id}`);
       fetchServices();
     }
   };
