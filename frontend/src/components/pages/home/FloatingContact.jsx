@@ -22,7 +22,7 @@ const FloatingContact = () => {
 
       {/* WhatsApp */}
       <a
-        href="https://wa.me/919999999999"
+        href="https://wa.me/919266706599"
         target="_blank"
         rel="noopener noreferrer"
         className="group relative bg-green-500 text-white p-3 md:p-4 rounded-full shadow-lg hover:scale-110 transition"
