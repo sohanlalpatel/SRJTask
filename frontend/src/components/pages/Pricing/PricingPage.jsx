@@ -311,7 +311,8 @@ const openWhatsApp = () => {
                   display: "flex", gap: 16, alignItems: "center",
                 }}>
                   {selectedPlan.service?.image && (
-                    <img src={selectedPlan.service.image} alt=""
+                    // <img src={selectedPlan.service.image} alt=""
+                    <img   src={`${BASE_URL}${selectedPlan.service?.image}`} alt=""
                       style={{ width: 72, height: 72, borderRadius: 12, objectFit: "cover", flexShrink: 0 }} />
                   )}
                   <div style={{ flex: 1 }}>
