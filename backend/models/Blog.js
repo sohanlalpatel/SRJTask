@@ -28,7 +28,7 @@ const blogSchema = new mongoose.Schema(
 
         author: {
             type: String,
-            default: "SRJ Global Team",
+            default: "G&S Solutions Team",
         },
 
         category: {

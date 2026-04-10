@@ -100,7 +100,7 @@ export default function Blogs() {
                 border: "1px solid #2563EB40",
               }}
             >
-              ✦ SRJ Blog
+              ✦ Gaming & Software Blog
             </span>
 
             <h1
@@ -126,7 +126,7 @@ export default function Blogs() {
               className="text-base md:text-lg max-w-md mx-auto mb-10"
               style={{ color: "#94a3b8", lineHeight: 1.7 }}
             >
-              Tech tutorials, case studies and deep-dives from the SRJ team.
+              Tech tutorials, case studies and deep-dives from the Gaming & Software team.
             </p>
 
             {/* Search */}
@@ -341,7 +341,7 @@ export default function Blogs() {
                             className="text-sm font-semibold"
                             style={{ color: "#0F172A" }}
                           >
-                            {featured.author || "SRJ Team"}
+                            {featured.author || "Gaming & Software Team"}
                           </p>
                           <p className="text-xs" style={{ color: "#94a3b8" }}>
                             {featured.readTime || "5 min read"}
@@ -539,7 +539,7 @@ function BlogCard({ blog, index }) {
           <div className="flex items-center gap-2">
             <Avatar name={blog.author || "S"} size={28} fontSize={10} />
             <span className="text-xs font-medium" style={{ color: "#475569" }}>
-              {blog.author || "SRJ Team"}
+              {blog.author || "Gaming & Software Team"}
             </span>
           </div>
           <div
