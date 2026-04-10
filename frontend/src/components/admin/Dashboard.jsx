@@ -32,7 +32,7 @@ export function Dashbaord() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState({ Dashboard: false });
   // const [userDropdownOpen, setUserDropdownOpen] = useState(false)
-  const [activeView, setActiveView] = useState("Dashboard");
+  const [activeView, setActiveView] = useState("Service Enquiry");
  
   
   useEffect(() => {
@@ -75,7 +75,7 @@ export function Dashbaord() {
     if (savedView) {
       setActiveView(savedView); // agar kuch save hai to wahi open hoga
     } else {
-      setActiveView("Dashboard"); // first time ya sessionStorage empty ho
+      setActiveView("Service Enquiry"); // first time ya sessionStorage empty ho
     }
   }, []);
 
