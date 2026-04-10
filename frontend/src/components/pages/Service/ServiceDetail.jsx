@@ -529,8 +529,8 @@ export default function ServiceDetail() {
                 >
                   <div className="relative">
                     <img
-                      src={s.image}
-                      alt={s.name}
+                      src={`${API}${s.image}`}
+                       alt={s.name}
                       className="w-full h-36 object-cover group-hover:scale-105 transition duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#020617] to-transparent opacity-60" />
