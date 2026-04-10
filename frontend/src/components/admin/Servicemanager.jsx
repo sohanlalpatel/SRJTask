@@ -452,7 +452,8 @@ const handleEdit = (service) => {
 
             {/* Image */}
             <img
-              src={selected.image}
+
+           src={`${API}${selected.image}`}
               className="w-full h-52 object-cover rounded-lg"
             />
 
