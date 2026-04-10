@@ -58,7 +58,7 @@ const AppContent = () => {
         <Route path="/about" element={<AboutPage />} />
 
         {/* ADMIN ROUTES */}
-        <Route path="/srj/admin/login" element={<AdminLogin />} />
+        <Route path="/gs/admin/login" element={<AdminLogin />} />
         <Route path="/srj/panel/dashboard" element={<Dashbaord />} />
         <Route path="/service-policy" element={<ServicePolicy />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
