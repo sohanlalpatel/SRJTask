@@ -3,8 +3,7 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
 
-const ENQUIRY_API = "http://localhost:5000/api/enquiries/submit";
-
+const ENQUIRY_API = `${import.meta.env.VITE_API_BASE_URL}/api/enquiries/submit`;
 export default function ServiceEnquiryModal({ service, onClose }) {
   const [step, setStep] = useState(1); // 1 = form, 2 = success
   const [loading, setLoading] = useState(false);
@@ -166,7 +165,9 @@ export default function ServiceEnquiryModal({ service, onClose }) {
             {/* ── HEADER ── */}
             <div className="sticky top-0 z-10 bg-[#020617] border-b border-white/10 px-6 py-4 flex items-start justify-between">
               <div>
-                <h2 className="text-lg font-bold text-white">Get This Service</h2>
+                <h2 className="text-lg font-bold text-white">
+                  Get This Service
+                </h2>
                 <p className="text-xs text-gray-400 mt-0.5 flex items-center gap-2">
                   <span className="text-[#38BDF8]">{service.name}</span>
                   {service.price && (
@@ -190,7 +191,7 @@ export default function ServiceEnquiryModal({ service, onClose }) {
               {/* Service Snapshot */}
               <div className="flex gap-4 bg-[#0f1e3d] border border-white/10 rounded-xl p-4">
                 <img
-                  src={service.image}
+                  src={`${import.meta.env.VITE_API_BASE_URL}${service.image}`}
                   alt={service.name}
                   className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
                 />
