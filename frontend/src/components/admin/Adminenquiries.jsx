@@ -30,7 +30,10 @@ import {
   Save,
 } from "lucide-react";
 
-const API = "http://localhost:5000/api/enquiries";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+
+const API = `${BASE}/api/enquiries`;
+// const API = "http://localhost:5000/api/enquiries";
 
 // ── Status config ──
 const STATUS_CONFIG = {

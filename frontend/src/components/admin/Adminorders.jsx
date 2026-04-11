@@ -30,7 +30,11 @@ import {
   Sparkles,
 } from "lucide-react";
 
-const API = "http://localhost:5000/api/orders";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+ 
+const API = `${BASE}/api/orders`;
+
+// const API = "http://localhost:5000/api/orders";
 
 const STATUS_CONFIG = {
   new: {
@@ -93,7 +97,8 @@ export default function AdminOrders() {
         setTotalPages(data.pages);
         setTotal(data.total);
       }
-    } catch (_) {
+    } catch (err) {
+      console.error("Fetch Orders Error:", err);
     } finally {
       setLoading(false);
     }
@@ -120,7 +125,10 @@ export default function AdminOrders() {
       fetchStats();
       if (selected?._id === id)
         setSelected((prev) => ({ ...prev, status, adminNote, assignedTo }));
-    } catch (_) {}
+    } catch (err) {
+      console.error("Update Status Error:", err);
+      alert("Failed to update status");
+    }
   };
 
   const confirmDelete = async () => {
@@ -130,7 +138,10 @@ export default function AdminOrders() {
       if (selected?._id === deleteId) setSelected(null);
       fetchOrders();
       fetchStats();
-    } catch (_) {}
+    } catch (err) {
+      console.error("Delete Error:", err);
+      alert("Delete failed");
+    }
   };
 
   const fmt = (d) =>

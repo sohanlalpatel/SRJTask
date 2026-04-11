@@ -19,11 +19,21 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-const CAT_API = "http://localhost:5000/api/categories";
-const PLAN_API = "http://localhost:5000/api/plans";
-const ADDON_API = "http://localhost:5000/api/addons";
-const SERV_API = "http://localhost:5000/api/services";
-const BASE_URL = "http://localhost:5000";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+
+const CAT_API = `${BASE}/api/categories`;
+const PLAN_API = `${BASE}/api/plans`;
+const ADDON_API = `${BASE}/api/addons`;
+const SERV_API = `${BASE}/api/services`;
+const BASE_URL = BASE;
+
+
+
+// const CAT_API = "http://localhost:5000/api/categories";
+// const PLAN_API = "http://localhost:5000/api/plans";
+// const ADDON_API = "http://localhost:5000/api/addons";
+// const SERV_API = "http://localhost:5000/api/services";
+// const BASE_URL = "http://localhost:5000";
 
 const TABS = [
   { key: "category", label: "Categories", icon: <Tag size={14} /> },

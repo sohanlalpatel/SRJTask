@@ -20,8 +20,12 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-const API = "http://localhost:5000/api/industries";
-const BASE_URL = "http://localhost:5000";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+const API = `${BASE}/api/industries`;
+const BASE_URL = BASE;
+
+// const API = "http://localhost:5000/api/industries";
+// const BASE_URL = "http://localhost:5000";
 
 const iconOptions = [
   "Heart",

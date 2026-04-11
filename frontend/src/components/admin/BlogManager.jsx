@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import BlogEditor from "./BlogEditor";
-import TiptapEditor from "./BlogEditor";
+ 
+// const API = "http://localhost:5000/api/blogs";
 
-const API = "http://localhost:5000/api/blogs";
+const BASE = import.meta.env.VITE_API_BASE_URL;
+const API = `${BASE}/api/blogs`;
+
+
+
 
 export default function BlogManager() {
   const [blogs, setBlogs] = useState([]);
@@ -21,11 +26,16 @@ export default function BlogManager() {
 const [content, setContent] = useState("");
 
   // ✅ Fetch
-  const fetchBlogs = async () => {
-    const res = await fetch(`${API}/admin/all`);
-    const data = await res.json();
-    setBlogs(data.data || []);
-  };
+ const fetchBlogs = async () => {
+   try {
+     const res = await fetch(`${API}/admin/all`);
+     const data = await res.json();
+     setBlogs(data.data || []);
+   } catch (err) {
+     console.error(err);
+     alert("Failed to load blogs");
+   }
+ };
 
   useEffect(() => {
     fetchBlogs();
@@ -217,8 +227,7 @@ setContent(blog.content || "");
             key={blog._id}
             className="bg-[#020617] rounded-xl overflow-hidden shadow-lg"
           >
-            <img
-              src={`http://localhost:5000${blog.image}`}
+           <img src={`${BASE}${blog.image}`}
               className="h-40 w-full object-cover"
             />
 
