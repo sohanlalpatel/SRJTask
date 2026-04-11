@@ -35,6 +35,10 @@ const serviceSchema = new mongoose.Schema(
             type: String,
         },
 
+        imagePublicId: {
+            type: String,
+        },
+
         features: [
             {
                 type: String,

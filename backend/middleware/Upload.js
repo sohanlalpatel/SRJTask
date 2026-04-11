@@ -1,79 +1,38 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
-
-// Ensure directory exists
-const ensureDirectoryExists = (dir) => {
-    if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-    }
-};
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
 // Upload Config
 const uploadConfig = {
-    serviceImage: {
-        folder: "services",
-        allowed: /\.(jpg|jpeg|png|webp|avif)$/i,
-    },
-    blogImage: {
-        folder: "blogs",
-        allowed: /\.(jpg|jpeg|png|webp|avif)$/i,
-    },
-    industryImage: {
-        folder: "industries",
-        allowed: /\.(jpg|jpeg|png|webp|avif)$/i,
-    },
-    resume: {
-        folder: "resumes",
-        allowed: /\.(pdf|doc|docx)$/i,
-    },
-    video: {
-        folder: "videos",
-        allowed: /\.(mp4|mov|avi|mkv)$/i,
-    },
+    serviceImage: "services",
+    blogImage: "blogs",
+    industryImage: "industries",
+    resume: "resumes",
+    video: "videos",
 };
 
-// Storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        const config = uploadConfig[file.fieldname];
+// Storage (Cloudinary)
+const storage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => {
+        const folder = uploadConfig[file.fieldname];
 
-        if (!config) {
-            return cb(new Error("Invalid file field name"), null);
+        if (!folder) {
+            throw new Error("Invalid file field name");
         }
 
-        const folder = path.join(__dirname, "..", "uploads", config.folder);
-        ensureDirectoryExists(folder);
-
-        cb(null, folder);
-    },
-
-    filename: function (req, file, cb) {
-        const ext = path.extname(file.originalname);
-        const base = path.basename(file.originalname, ext).replace(/\s+/g, "-");
-        const uniqueName = `${Date.now()}-${base}${ext}`;
-        cb(null, uniqueName);
+        return {
+            folder,
+            resource_type: "auto", // image/video/pdf sab support
+        };
     },
 });
 
-// File Filter
-const fileFilter = (req, file, cb) => {
-    const config = uploadConfig[file.fieldname];
-
-    if (!config) return cb(new Error("Invalid file field name"), false);
-
-    if (config.allowed.test(file.originalname)) {
-        cb(null, true);
-    } else {
-        cb(new Error(`Invalid file type for ${file.fieldname}`), false);
-    }
-};
-
 // Limits
 const limits = {
-    fileSize: 3 * 1024 * 1024, // 3MB
+    fileSize: 5 * 1024 * 1024,
 };
 
-const upload = multer({ storage, fileFilter, limits });
+const upload = multer({ storage, limits });
 
 module.exports = upload;

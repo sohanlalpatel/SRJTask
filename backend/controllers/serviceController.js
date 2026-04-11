@@ -21,9 +21,9 @@ exports.createService = async (req, res) => {
         const service = await Service.create({
             ...req.body,
             slug,
-            image: req.file
-                ? `/uploads/services/${req.file.filename}`
-                : "",
+            image: req.file ? req.file.path : "",
+            imagePublicId: req.file ? req.file.filename : "", 
+
             features: typeof req.body.features === "string"
                 ? req.body.features.split(",").map(f => f.trim())
                 : [],
@@ -115,7 +115,8 @@ exports.updateService = async (req, res) => {
         let updateData = { ...req.body };
 
         if (req.file) {
-            updateData.image = `/uploads/services/${req.file.filename}`;
+            updateData.image = req.file.path;
+            updateData.imagePublicId = req.file.filename;
         }
 
         if (typeof req.body.features === "string") {
