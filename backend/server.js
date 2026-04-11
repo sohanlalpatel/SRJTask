@@ -17,12 +17,18 @@ const enquiryRoutes = require("./routers/enquiryRoutes");
 const orderRoutes = require("./routers/orderRoutes");
 
 
-dotenv.config();
-
+ 
 const app = express();
 
  app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://gaming-sw.vercel.app"
+    ],
+    credentials: true
+}));
+
 app.use(express.urlencoded({ extended: true }));
 mongoose
     .connect(process.env.MONGO_URI)
@@ -38,7 +44,7 @@ app.use("/api/categories", categoryRoutes);
 app.use("/api/plans", planRoutes);
 app.use("/api/addons", addonRoutes);
 app.use("/api/contact", contactRoutes);
-app.use("/api/chat", require("./routers/chatroutes"));
+app.use("/api/chat", chatRoutes); 
 app.use("/api/twilio", require("./routers/twilioWebhook"));
 app.use("/api/industries", industryRoutes);
 app.use("/api/enquiries", enquiryRoutes);
@@ -47,7 +53,8 @@ app.use("/api/enquiries", enquiryRoutes);
 app.get("/health", (req, res) => {
     res.status(200).json({
         status: "OK",
-        message: "Server is live 🚀",
+        uptime: process.uptime(),
+        timestamp: new Date(),
     });
 });
 
@@ -59,4 +66,13 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`🔥 Server running on port ${PORT}`);
+});
+
+
+
+app.use((err, req, res, next) => {
+    console.error("❌ Global Error:", err);
+    res.status(500).json({
+        message: err.message || "Internal Server Error"
+    });
 });
