@@ -9,6 +9,9 @@ import {
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 
+
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const ContactUs = () => {
   // STATE
   const [formData, setFormData] = useState({
@@ -47,10 +50,7 @@ const ContactUs = () => {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/contact/create",
-        formData,
-      );
+    const res = await axios.post(`${API}/api/contact/create`, formData);
 
       alert(res.data.message);
 
