@@ -252,7 +252,7 @@ const activeData = useMemo(
                   </div>
 
                   {/* BACK BUTTON */}
-                  <button
+                  {/* <button
                     onClick={() => {
                       setShowAll(true);
                       setTab("overview");
@@ -260,7 +260,7 @@ const activeData = useMemo(
                     className="mt-6 border border-[#38BDF8] px-6 py-2 rounded-full hover:bg-[#38BDF8] hover:text-black transition"
                   >
                     ← Back to All Industrial Services
-                  </button>
+                  </button> */}
                 </div>
 
                 {/* RIGHT IMAGE */}
