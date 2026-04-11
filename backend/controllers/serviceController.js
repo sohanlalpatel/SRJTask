@@ -116,8 +116,11 @@ exports.updateService = async (req, res) => {
 
         if (req.file) {
             updateData.image = req.file.path;
-            updateData.imagePublicId = req.file.filename;
-        }
+            // SAFE
+            updateData.imagePublicId =
+                req.file.filename ||
+                req.file.public_id ||
+                "";        }
 
         if (typeof req.body.features === "string") {
             updateData.features = req.body.features.split(",").map(f => f.trim());

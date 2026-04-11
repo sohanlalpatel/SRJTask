@@ -1180,7 +1180,12 @@ export default function ServiceManager() {
           >
             <div style={{ position: "relative" }}>
               <img
-                src={selected.image}
+                src={
+                  selected.image?.startsWith("http")
+                    ? selected.image
+                    : `${API}${selected.image}`
+                }
+                
                 alt={selected.name}
                 style={{
                   width: "100%",
@@ -1498,8 +1503,7 @@ function ServiceCard({ service: s, onView, onEdit, onDelete, API }) {
       {/* Image */}
       <div style={{ position: "relative", height: 160 }}>
         <img
-          src={s.image}
-
+          src={s.image?.startsWith("http") ? s.image : `${API}${s.image}`}
           alt={s.name}
           style={{
             width: "100%",
@@ -1741,7 +1745,7 @@ function ListView({ services, onView, onEdit, onDelete, API }) {
           >
             {s.image ? (
               <img
-                src={s.image}
+                src={s.image?.startsWith("http") ? s.image : `${API}${s.image}`}
                 alt=""
                 style={{
                   width: 36,
