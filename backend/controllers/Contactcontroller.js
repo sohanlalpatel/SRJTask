@@ -4,38 +4,84 @@ const resend = require("../config/resend");
 
 
 const sendEmails = async (name, email, phone, service, message) => {
-
     try {
         // 👉 ADMIN EMAIL
         await resend.emails.send({
-            from: "onboarding@resend.dev",
+            from: "SRJ Website <onboarding@resend.dev>",
             to: process.env.EMAIL_USER,
             subject: "📩 New Contact Query",
-            html: `<h3>New Message from ${name}</h3>
-             <p><b>Email:</b> ${email}</p>
-             <p><b>Phone:</b> ${phone}</p>
-             <p><b>Service:</b> ${service}</p>
-             <p><b>Message:</b> ${message}</p>`,
+            html: `
+            <div style="font-family: Arial; padding:20px;">
+                <h2 style="color:#4CAF50;">New Contact Request 🚀</h2>
+                
+                <table style="border-collapse: collapse; width:100%;">
+                    <tr>
+                        <td><b>Name:</b></td>
+                        <td>${name}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Email:</b></td>
+                        <td>${email}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Phone:</b></td>
+                        <td>${phone}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Service:</b></td>
+                        <td>${service}</td>
+                    </tr>
+                </table>
+
+                <div style="margin-top:20px;">
+                    <b>Message:</b>
+                    <p style="background:#f5f5f5; padding:10px; border-radius:8px;">
+                        ${message}
+                    </p>
+                </div>
+            </div>
+            `,
         });
 
         console.log("✅ Admin email sent");
 
         // 👉 USER EMAIL
         await resend.emails.send({
-            from: "onboarding@resend.dev",
+            from: "SRJ Global <onboarding@resend.dev>",
             to: email,
-            subject: "✅ We received your message",
-            html: `<h2>Thank you ${name}</h2>
-             <p>We will contact you soon.</p>`,
+            subject: "✅ Thanks for contacting SRJ",
+            html: `
+            <div style="font-family: Arial; padding:20px;">
+                <h2 style="color:#4CAF50;">Hello ${name} 👋</h2>
+                
+                <p>Thank you for reaching out to <b>SRJ Global Technology</b>.</p>
+                
+                <p>We have received your request regarding <b>${service}</b>.</p>
+
+                <div style="background:#f5f5f5; padding:15px; border-radius:8px;">
+                    <p><b>Your Message:</b></p>
+                    <p>${message}</p>
+                </div>
+
+                <p style="margin-top:20px;">
+                    Our team will contact you shortly 🚀
+                </p>
+
+                <hr/>
+
+                <p style="font-size:12px; color:gray;">
+                    This is an automated email. Please do not reply.
+                </p>
+            </div>
+            `,
         });
 
         console.log("✅ User email sent");
 
     } catch (err) {
-        console.error("❌ Resend Error:", err);
+        console.error("❌ Resend Error FULL:", err);
     }
 };
-
 
 
 
