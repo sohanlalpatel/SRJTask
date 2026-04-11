@@ -1,36 +1,40 @@
 const Contact = require("../models/Contact");
 const transporter = require("../config/email");
- 
+const resend = require("../config/resend");
 
 
-const sendEmails = (name, email, phone, service, message) => {
+const sendEmails = async (name, email, phone, service, message) => {
 
-    // 👉 ADMIN EMAIL
-    transporter.sendMail({
-        from: `"Gaming&Software Website" <${process.env.EMAIL_USER}>`,
-        to: process.env.EMAIL_USER,
-        subject: "📩 New Contact Query",
-        html: `<h3>New Message from ${name}</h3>
-               <p><b>Email:</b> ${email}</p>
-               <p><b>Phone:</b> ${phone}</p>
-               <p><b>Service:</b> ${service}</p>
-               <p><b>Message:</b> ${message}</p>`,
-    })
-        .then(() => console.log("✅ Admin email sent"))
-        .catch(err => console.error("❌ Admin Email Error:", err));
+    try {
+        // 👉 ADMIN EMAIL
+        await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: process.env.EMAIL_USER,
+            subject: "📩 New Contact Query",
+            html: `<h3>New Message from ${name}</h3>
+             <p><b>Email:</b> ${email}</p>
+             <p><b>Phone:</b> ${phone}</p>
+             <p><b>Service:</b> ${service}</p>
+             <p><b>Message:</b> ${message}</p>`,
+        });
 
-    // 👉 USER EMAIL
-    transporter.sendMail({
-        from: `"SRJ Global" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: "✅ We received your message",
-        html: `<h2>Thank you ${name}</h2>
-               <p>We will contact you soon.</p>`,
-    })
-        .then(() => console.log("✅ User email sent"))
-        .catch(err => console.error("❌ User Email Error:", err));
+        console.log("✅ Admin email sent");
+
+        // 👉 USER EMAIL
+        await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "✅ We received your message",
+            html: `<h2>Thank you ${name}</h2>
+             <p>We will contact you soon.</p>`,
+        });
+
+        console.log("✅ User email sent");
+
+    } catch (err) {
+        console.error("❌ Resend Error:", err);
+    }
 };
-
 
 
 
