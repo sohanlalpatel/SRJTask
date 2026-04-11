@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
-
+import Swal from "sweetalert2";
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,42 +33,60 @@ const ContactUs = () => {
   };
 
   // HANDLE SUBMIT
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (
-      !formData.name ||
-      !formData.email ||
-      !formData.phone ||
-      !formData.service ||
-      !formData.message
-    ) {
-      alert("Please fill all fields");
-      return;
-    }
+  if (
+    !formData.name ||
+    !formData.email ||
+    !formData.phone ||
+    !formData.service ||
+    !formData.message
+  ) {
+    Swal.fire({
+      icon: "warning",
+      title: "Missing Fields",
+      text: "Please fill all fields",
+      background: "#0F172A",
+      color: "#fff",
+    });
+    return;
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
     const res = await axios.post(`${API}/api/contact/create`, formData);
 
-      alert(res.data.message);
+    Swal.fire({
+      icon: "success",
+      title: "Message Sent 🚀",
+      text: res.data.message,
+      background: "#0F172A",
+      color: "#fff",
+    });
 
-      // reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        message: "",
-      });
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      service: "",
+      message: "",
+    });
+  } catch (error) {
+    console.error(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Oops!",
+      text: error?.response?.data?.message || "Something went wrong",
+      background: "#0F172A",
+      color: "#fff",
+    });
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
