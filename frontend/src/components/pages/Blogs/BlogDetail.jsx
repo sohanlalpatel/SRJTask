@@ -5,7 +5,12 @@ import { Eye, User, Tag } from "lucide-react";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 
-const API = "http://localhost:5000/api/blogs";
+
+
+const BASE = import.meta.env.VITE_API_BASE_URL;
+const API = `${BASE}/api/blogs`;
+
+// const API = "http://localhost:5000/api/blogs";
 
 export default function BlogDetail() {
   const { slug } = useParams();

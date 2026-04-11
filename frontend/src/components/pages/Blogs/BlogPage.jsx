@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Navbar from "../home/Navbar";
@@ -10,11 +10,22 @@ const BASE = import.meta.env.VITE_API_BASE_URL;
 const API = `${BASE}/api/blogs`;
 // const API = "http://localhost:5000/api/blogs";
 
+
+const imgSrc = (path) =>
+  !path ? null : path.startsWith("/uploads") ? `${BASE}${path}` : path;
+
+
+
+
 export default function Blogs() {
   const [blogs, setBlogs]         = useState([]);
   const [search, setSearch]       = useState("");
   const [activeTab, setActiveTab] = useState("All");
   const [loading, setLoading]     = useState(true);
+
+
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -31,20 +42,25 @@ export default function Blogs() {
   }, []);
 
   // ── unique categories extracted from actual blog data ──
-  const categories = [
+const categories = useMemo(
+  () => [
     "All",
     ...Array.from(new Set(blogs.map((b) => b.category).filter(Boolean))),
-  ];
+  ],
+  [blogs],
+);
 
   // ── FIXED FILTER: both search + category work together ──
-  const filtered = blogs.filter((b) => {
+const filtered = useMemo(() => {
+  return blogs.filter((b) => {
     const q = search.trim().toLowerCase();
+
     const matchSearch =
       q === "" ||
       b.title.toLowerCase().includes(q) ||
-      (b.shortDesc  || "").toLowerCase().includes(q) ||
-      (b.excerpt    || "").toLowerCase().includes(q) ||
-      (b.category   || "").toLowerCase().includes(q);
+      (b.shortDesc || "").toLowerCase().includes(q) ||
+      (b.excerpt || "").toLowerCase().includes(q) ||
+      (b.category || "").toLowerCase().includes(q);
 
     const matchCat =
       activeTab === "All" ||
@@ -52,6 +68,7 @@ export default function Blogs() {
 
     return matchSearch && matchCat;
   });
+}, [blogs, search, activeTab]);
 
   // featured only on default view (no search / no tab filter)
   const showFeatured = !search.trim() && activeTab === "All";
@@ -498,7 +515,7 @@ function BlogCard({ blog, index }) {
       >
         {blog.image ? (
           <img
-            src={`${BASE}${blog.image}`}
+            src={imgSrc(blog.image)}
             alt={blog.title}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
