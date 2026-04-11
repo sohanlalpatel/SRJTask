@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
+const API = import.meta.env.VITE_API_BASE_URL;
+
 const AdminContact = () => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -8,7 +11,7 @@ const AdminContact = () => {
   // FETCH DATA
   const fetchContacts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/contact");
+      const res = await axios.get(`${API}/api/contact`);
       setContacts(res.data.data);
       setLoading(false);
     } catch (error) {
@@ -26,7 +29,7 @@ const AdminContact = () => {
     if (!window.confirm("Delete this query?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/contact/${id}`);
+      await axios.delete(`${API}/api/contact/${id}`);
       fetchContacts();
     } catch (error) {
       console.log(error);
@@ -36,9 +39,8 @@ const AdminContact = () => {
   // UPDATE STATUS
   const handleStatusChange = async (id, status) => {
     try {
-      await axios.put(`http://localhost:5000/api/contact/${id}`, {
-        status,
-      });
+      await axios.put(`${API}/api/contact/${id}`, { status });
+      
       fetchContacts();
     } catch (error) {
       console.log(error);
