@@ -7,7 +7,7 @@ const sendEmails = (name, email, phone, service, message) => {
 
     // 👉 ADMIN EMAIL
     transporter.sendMail({
-        from: `"SRJ Website" <${process.env.EMAIL_USER}>`,
+        from: `"Gaming&Software Website" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER,
         subject: "📩 New Contact Query",
         html: `<h3>New Message from ${name}</h3>
