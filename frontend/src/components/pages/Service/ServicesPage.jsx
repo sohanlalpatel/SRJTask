@@ -12,13 +12,23 @@ export default function Services() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [sortBy, setSortBy] = useState("default");
+const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios.get(`${API}/api/services/getAllServices`).then((res) => {
-      setServices(res.data.data || []);
-    });
-  }, []);
+ useEffect(() => {
+   setLoading(true);
+
+   axios
+     .get(`${API}/api/services/getAllServices`)
+     .then((res) => {
+       setServices(res.data.data || []);
+     })
+     .catch(() => {})
+     .finally(() => {
+       setLoading(false);
+     });
+ }, []);
 
   const renderIcon = (name) => {
     const Icon = Icons[name] || Icons.Code;
@@ -39,6 +49,22 @@ export default function Services() {
       ? [...filtered].sort((a, b) => a.name.localeCompare(b.name))
       : filtered;
 
+
+if (loading) {
+  return (
+    <>
+      <Navbar />
+      <div className="min-h-screen flex items-center justify-center bg-[#081638] text-white">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-[#38BDF8] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-gray-400 text-sm">Loading services...</p>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
+}
+      
   return (
     <>
       <Navbar />
@@ -137,6 +163,13 @@ export default function Services() {
             </p>
           ) : null}
 
+ 
+
+
+
+
+
+
           {/* GRID */}
           {finalData.length === 0 ? (
             <div className="text-center py-20 text-gray-400">
@@ -161,7 +194,14 @@ export default function Services() {
                   {/* Image */}
                   <div className="relative overflow-hidden">
                     <img
-                      src={`${API}${s.image}`}
+                      src={
+                        s.image?.startsWith("http")
+                          ? s.image
+                          : `${API}${s.image}`
+                      }
+                      onError={(e) => {
+                        e.target.src = "/placeholder.jpg";
+                      }}
                       className="w-full h-44 object-cover group-hover:scale-105 transition duration-500"
                       alt={s.name}
                     />
