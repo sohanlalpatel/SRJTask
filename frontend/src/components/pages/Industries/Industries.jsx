@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Heart,
   Calendar,
@@ -27,7 +27,10 @@ const iconMap = {
   GraduationCap: <GraduationCap />,
 };
 
-const BASE_URL = "http://localhost:5000"; // change to your backend URL
+
+const BASE = import.meta.env.VITE_API_BASE_URL;
+const BASE_URL = BASE;
+// const BASE_URL = "http://localhost:5000"; // change to your backend URL
 
 export default function Industries() {
   const [industries, setIndustries] = useState([]);
@@ -55,7 +58,9 @@ export default function Industries() {
           setError("Failed to load industries.");
         }
       } catch (err) {
-        setError("Network error. Please try again.");
+  console.error("Industries Fetch Error:", err);
+  setError("Network error. Please try again.");
+
       } finally {
         setLoading(false);
       }
@@ -64,8 +69,10 @@ export default function Industries() {
     fetchIndustries();
   }, []);
 
-  const activeData = industries.find((i) => i._id === active) || null;
-
+const activeData = useMemo(
+  () => industries.find((i) => i._id === active) || null,
+  [industries, active],
+);
   // ================= LOADING =================
   if (loading) {
     return (
