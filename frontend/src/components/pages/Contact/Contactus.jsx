@@ -96,7 +96,7 @@ const handleSubmit = async (e) => {
         {/* HERO */}
         <div className="bg-gradient-to-r from-[#0F172A] via-[#2563EB] to-[#7C3AED] pt-34 py-16 px-6 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Contact SRJ Global Technology
+            Contact Gaming & Software Solutions
           </h1>
           <p className="text-gray-300 max-w-2xl mx-auto">
             Have a project in mind? Let’s talk. We’re here to help you grow your
