@@ -77,7 +77,7 @@ exports.getServicesByCategory = async (req, res) => {
 // GET ALL
 exports.getAllServices = async (req, res) => {
     try {
-        const services = await Service.find({ isActive: true })
+        const services = await Service.find( )
             .populate("category")
             .sort({ order: 1 });
 
