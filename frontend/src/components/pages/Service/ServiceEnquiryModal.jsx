@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import * as Icons from "lucide-react";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 const ENQUIRY_API = `${import.meta.env.VITE_API_BASE_URL}/api/enquiries/submit`;
 export default function ServiceEnquiryModal({ service, onClose }) {
@@ -191,9 +192,14 @@ export default function ServiceEnquiryModal({ service, onClose }) {
               {/* Service Snapshot */}
               <div className="flex gap-4 bg-[#0f1e3d] border border-white/10 rounded-xl p-4">
                 <img
-                  src={`${import.meta.env.VITE_API_BASE_URL}${service.image}`}
+                  src={getImageUrl(
+                    service.image,
+                    import.meta.env.VITE_API_BASE_URL,
+                  )}
+                  onError={(e) => (e.target.src = "/no-image.png")}
                   alt={service.name}
                   className="w-16 h-16 object-cover rounded-lg flex-shrink-0"
+                  loading="lazy"
                 />
                 <div>
                   <p className="font-semibold text-sm">{service.name}</p>

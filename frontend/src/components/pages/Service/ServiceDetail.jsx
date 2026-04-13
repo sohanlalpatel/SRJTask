@@ -6,6 +6,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import Navbar from "../home/Navbar";
 import Footer from "../home/Footer";
 import ServiceEnquiryModal from "./ServiceEnquiryModal";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -76,7 +77,8 @@ export default function ServiceDetail() {
         {/* ── HERO BANNER ── */}
         <div className="relative h-[380px] md:h-[440px]     overflow-hidden">
           <img
-            src={`${API}${service.image}`}
+          src={getImageUrl(service.image, API)} 
+            
             alt={service.name}
             className="w-full h-full object-cover"
           />
@@ -529,7 +531,8 @@ export default function ServiceDetail() {
                 >
                   <div className="relative">
                     <img
-                      src={`${API}${s.image}`}
+                    src={getImageUrl(s.image, API)} 
+                    
                        alt={s.name}
                       className="w-full h-36 object-cover group-hover:scale-105 transition duration-500"
                     />
