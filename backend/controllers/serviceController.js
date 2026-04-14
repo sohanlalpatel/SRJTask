@@ -32,7 +32,7 @@ exports.createService = async (req, res) => {
         res.json({ success: true, data: service });
 
     } catch (err) {
-        console.error("CREATE ERROR:", err); // 🔥 IMPORTANT
+        console.error("CREATE ERROR:", err); 
         res.status(500).json({ error: err.message });
     }
 };
@@ -61,7 +61,7 @@ exports.getServicesByCategory = async (req, res) => {
             category: req.params.categoryId,
             isActive: true,
         })
-            .populate("category") // ✅ IMPORTANT
+            .populate("category") 
             .sort({ order: 1 });
 
         res.json({
